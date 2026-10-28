@@ -1,0 +1,28 @@
+{
+  "name": "pathscope",
+  "version": "1.0.0",
+  "description": "PathScope — Chandigarh & Himachal Route Planner | DSA Course Project by Manas Gupta, Chandigarh University",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node startApp.js",
+    "dev": "node startApp.js",
+    "test": "cd server && npm test",
+    "start:server": "cd server && npm start",
+    "start:client": "cd client && npm run dev",
+    "build:client": "cd client && npm run build"
+  },
+  "keywords": [
+    "dijkstra",
+    "astar",
+    "graph",
+    "min-heap",
+    "chandigarh",
+    "himachal",
+    "route-planner",
+    "dsa"
+  ],
+  "author": "Manas Gupta (Chandigarh University)",
+  "license": "ISC"
+}
+
