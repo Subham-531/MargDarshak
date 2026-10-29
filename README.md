@@ -10,7 +10,7 @@
 
 In conventional Data Structures & Algorithms (DSA) courses, graph algorithms are taught on abstract node-and-edge diagrams ($A, B, C, D$). Students calculate Dijkstra by hand on paper or dry-run slides, but rarely see how real-world navigation engines translate a physical highway and road network into a weighted graph.
 
-**PathScope** solves this by modeling the physical road network of **Chandigarh, the Tricity region, and the mountainous corridors of Himachal Pradesh** as a weighted graph of **48 realistic nodes and 65 edges**. It implements:
+**PathScope** combines Google Maps driving directions for real road routes with a weighted graph of **48 locations and 65 edges** for DSA demonstrations across **Chandigarh, the Tricity region, and Himachal Pradesh**. The project implements:
 - **Graph as an Adjacency List** from scratch.
 - **Binary Min-Heap Priority Queue** from scratch.
 - **Dijkstra’s Shortest Path Algorithm** from scratch.
@@ -20,17 +20,22 @@ In conventional Data Structures & Algorithms (DSA) courses, graph algorithms are
 - **Head-to-Head Compare Mode** demonstrating why and how A* explores fewer nodes than Dijkstra.
 - **Viva & Evaluation Dashboard** with live test runner for all PRD verification test cases (T1–T7 and real-map benchmarks R1–R5).
 
+**Find Route** always requests and draws Google's snapped driving route directly. **Simulate Algorithm** offers two modes: **Actual Road Network** samples and progressively reveals Google's returned road geometry, while **Direct Graph / Straight Edges** runs the backend A* search and animates its traced node and weighted-edge exploration using straight lines between graph coordinates. The graph mode highlights its final shortest path in green and follows selected stops in their listed order. Straight-edge rendering is opt-in; route lookup remains independent of the selected simulation mode. Pause or resume either animation and adjust its delay from 25–500 ms per step (50 ms by default).
+
+The control panel's **Compare Algorithms** dialog provides a complexity and shortest-path guarantee reference for Dijkstra, A*, BFS, DFS, and Bellman-Ford. It can be dismissed with its close button, by clicking outside the dialog, or with Escape. The header's existing **Compare** action remains the live Dijkstra-versus-A* comparison for the selected locations.
+
 ---
 
 ## 2. System Architecture & Tech Stack
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│               Frontend: React + Leaflet               │
-│  · Leaflet Dark Map & Graph Layer Overlays            │
-│  · Step-by-Step Simulation Player with Trace Replay   │
-│  · Live MinHeap Inspection & Distance Table           │
-│  · Compare Mode Modal (Dijkstra vs A*)                │
+│          Frontend: React + Google Maps API             │
+│  · Google Routes Library driving routes               │
+│  · Route geometry & totals from Google Maps           │
+│  · Graph location markers & selectable waypoints      │
+│  · Driving-route reveal animation from sampled geometry│
+│  · Separate DSA Compare Mode (Dijkstra vs A*)         │
 │  · DSA Viva Reference Manual & Live Test Runner       │
 └───────────────────────────▲────────────────────────────┘
                             │ REST JSON API
@@ -153,9 +158,26 @@ npm test
 ```
 Executes all 12 unit tests and real-map benchmark corridors.
 
+## 7. Google Maps Setup
+
+The frontend uses the **Google Maps JavaScript API Routes Library** to calculate driving routes and render Google's road-following geometry. Google supplies the displayed route, distance, and duration; this is separate from the local Dijkstra/A* graph comparison, which remains available as an educational tool. Map clicks snap the chosen start or destination to the nearest PathScope location, and optional graph locations can be added as driving stops. With multiple stops, Google can reorder the waypoints to optimize the drive. Google returns its recommended route; this is not a guarantee of the mathematically shortest path over every road.
+
+1. In Google Cloud Console, create or select a project and attach a billing account.
+2. Enable **Maps JavaScript API** and **Routes API** for that project.
+3. Create an API key. Restrict it to **Maps JavaScript API** and **Routes API** and to the HTTP referrers used by the app (for local development, allow `http://localhost:3000/*` and `http://127.0.0.1:3000/*`; if port 3000 is occupied, Vite may use `3001`, which also needs to be allowed. Add your production hostname before deployment).
+4. Copy `client/.env.example` to `client/.env.local` and set:
+   ```dotenv
+   VITE_GOOGLE_MAPS_API_KEY=your-restricted-browser-api-key
+   ```
+5. Restart the Vite frontend after changing the environment file.
+
+The `VITE_` variable is embedded in the browser bundle, so this is a **public browser key, not a server secret**. Restrict it by referrer and enabled API, and do not use an unrestricted key or a server-side credential here. Local environment files are ignored by Git. Google Maps Platform requires billing to be configured; review current Google Maps Platform pricing and quotas for your account.
+
+No Places or Geocoding API is required: locations are selected from the existing graph data and nearest-node endpoint.
+
 ---
 
-## 7. Viva Q&A Quick Reference
+## 8. Viva Q&A Quick Reference
 
 1. **Why Adjacency List over Adjacency Matrix?**  
    Road networks are sparse graphs ($E \ll V^2$). Adjacency list takes $O(V+E)$ space instead of $O(V^2)$.

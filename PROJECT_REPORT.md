@@ -59,11 +59,10 @@ PathScope follows a decoupled, three-tier modular architecture:
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│               Frontend: React + Leaflet               │
-│  · Leaflet Dark Map & Graph Layer Overlays            │
-│  · Step-by-Step Simulation Player with Trace Replay   │
-│  · Live MinHeap Inspection & Distance Table           │
-│  · Compare Mode Modal (Dijkstra vs A*)                │
+│          Frontend: React + Google Maps API             │
+│  · Google Routes Library driving routes              │
+│  · Clickable graph locations & driving waypoints      │
+│  · DSA Compare Mode (separate from driving routes)    │
 │  · DSA Viva Reference Manual & Live Test Runner       │
 └───────────────────────────▲────────────────────────────┘
                             │ REST JSON API

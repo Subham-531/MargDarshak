@@ -3,6 +3,11 @@ node_modules/
 client/node_modules/
 server/node_modules/
 
+# Local environment variables (except documented templates)
+.env
+.env.*
+!.env.example
+
 # Production build artifacts
 dist/
 client/dist/
@@ -18,4 +23,3 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
-

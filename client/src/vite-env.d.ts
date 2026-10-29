@@ -1,0 +1,7 @@
+/// <reference types="vite/client" />
+/// <reference types="google.maps" />
+/// <reference types="node" />
+
+interface ImportMetaEnv {
+  readonly VITE_GOOGLE_MAPS_API_KEY?: string;
+}
