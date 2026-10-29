@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Compass,
   GitCompare,
+  Moon,
   Search,
-  Sparkles,
+  Sun,
 } from 'lucide-react';
 import { Button, Tooltip } from './ui';
 import { springSoft } from '../lib/motion';
@@ -12,6 +12,8 @@ import { springSoft } from '../lib/motion';
 export interface HeaderProps {
   onOpenCompare: () => void;
   onOpenCommandPalette?: () => void;
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
   stats?: {
     totalNodes: number;
     totalEdges: number;
@@ -22,6 +24,8 @@ export interface HeaderProps {
 export default function Header({
   onOpenCompare,
   onOpenCommandPalette,
+  theme,
+  onToggleTheme,
   stats,
 }: HeaderProps) {
   const prefersReducedMotion = useReducedMotion();
@@ -36,23 +40,11 @@ export default function Header({
       >
         {/* Brand & Title */}
         <div className="flex items-center gap-3">
-          <motion.div
-            whileHover={!prefersReducedMotion ? { rotate: 45, scale: 1.05 } : undefined}
-            transition={springSoft}
-            className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#E9DEFF] via-[#FFE5D9] to-[#D9F2E6] flex items-center justify-center shadow-soft border border-white/80 text-ink-900 cursor-pointer"
-          >
-            <Compass className="w-5 h-5 text-purple-900" />
-          </motion.div>
-
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-base md:text-lg font-extrabold text-ink-900 tracking-tight">
                 PathScope
               </h1>
-              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#E9DEFF]/70 text-purple-900 border border-purple-200/60 hidden sm:inline-flex items-center gap-1">
-                <Sparkles className="w-2.5 h-2.5 text-purple-700" />
-                v1.0 · Chandigarh & HP
-              </span>
             </div>
             <p className="text-[11px] text-ink-500 hidden lg:block font-medium">
               Google Maps Driving Routes · DSA Graph Explorer
@@ -76,6 +68,22 @@ export default function Header({
 
         {/* Right Action Buttons */}
         <div className="flex items-center gap-1.5 md:gap-2">
+          <Tooltip content={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}>
+            <button
+              type="button"
+              onClick={onToggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+              aria-pressed={theme === 'light'}
+              className="p-2 rounded-full bg-ink-50 text-ink-700 hover:bg-white border border-ink-200 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8BAE52]"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4" aria-hidden="true" />
+              ) : (
+                <Moon className="w-4 h-4" aria-hidden="true" />
+              )}
+            </button>
+          </Tooltip>
+
           {onOpenCommandPalette && (
             <button
               onClick={onOpenCommandPalette}

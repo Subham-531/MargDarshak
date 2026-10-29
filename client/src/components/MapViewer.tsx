@@ -50,6 +50,7 @@ export interface DirectionsRouteSummary {
 }
 
 export interface MapViewerProps {
+  theme: 'dark' | 'light';
   nodes?: NodeItem[];
   edges?: EdgeItem[];
   directionsRequest?: DirectionsRouteRequest | null;
@@ -94,6 +95,66 @@ const hasCoordinates = (
 ): node is NodeItem & { lat: number; lng: number } =>
   Boolean(node && Number.isFinite(node.lat) && Number.isFinite(node.lng));
 
+const darkMapStyles: google.maps.MapTypeStyle[] = [
+  { elementType: 'geometry', stylers: [{ color: '#0d0d0d' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#A6A6A6' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#0d0d0d' }] },
+  {
+    featureType: 'administrative',
+    elementType: 'geometry',
+    stylers: [{ visibility: 'off' }],
+  },
+  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#141414' }] },
+  {
+    featureType: 'landscape.natural',
+    elementType: 'geometry',
+    stylers: [{ color: '#1b221a' }],
+  },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#181818' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#1e291d' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#4a4a4a' }] },
+  { featureType: 'road.local', elementType: 'geometry', stylers: [{ color: '#383838' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#6e6e6e' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#b8b8b8' }] },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#2a2a2a' }, { weight: 1 }],
+  },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#000000' }] },
+];
+
+const lightMapStyles: google.maps.MapTypeStyle[] = [
+  { elementType: 'geometry', stylers: [{ color: '#f1f2ec' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#596153' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#f8f8f4' }] },
+  {
+    featureType: 'administrative',
+    elementType: 'geometry',
+    stylers: [{ visibility: 'off' }],
+  },
+  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f1f2ec' }] },
+  {
+    featureType: 'landscape.natural',
+    elementType: 'geometry',
+    stylers: [{ color: '#e8ede1' }],
+  },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#ecefe8' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#dfe9d8' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road.local', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#fdfcf8' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#eee6d4' }] },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#d5c9ad' }, { weight: 1 }],
+  },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#dce8e8' }] },
+];
+
 declare global {
   interface Window {
     gm_authFailure?: () => void;
@@ -101,6 +162,7 @@ declare global {
 }
 
 export default function MapViewer({
+  theme,
   nodes = [],
   edges = [],
   directionsRequest = null,
@@ -129,6 +191,7 @@ export default function MapViewer({
   const routePolylinesRef = useRef<google.maps.Polyline[]>([]);
   const simulationMarkerRef = useRef<google.maps.Marker | null>(null);
   const simulationPolylineRef = useRef<google.maps.Polyline | null>(null);
+  const simulationHaloPolylineRef = useRef<google.maps.Polyline | null>(null);
   const graphSimulationPolylinesRef = useRef(
     new Map<string, google.maps.Polyline>()
   );
@@ -185,70 +248,7 @@ export default function MapViewer({
           minZoom: 6,
           maxZoom: 20,
           mapTypeId: 'roadmap',
-          styles: [
-            { elementType: 'geometry', stylers: [{ color: '#0d0d0d' }] },
-            { elementType: 'labels.text.fill', stylers: [{ color: '#A6A6A6' }] },
-            { elementType: 'labels.text.stroke', stylers: [{ color: '#0d0d0d' }] },
-            {
-              featureType: 'administrative',
-              elementType: 'geometry',
-              stylers: [{ visibility: 'off' }],
-            },
-            {
-              featureType: 'landscape',
-              elementType: 'geometry',
-              stylers: [{ color: '#141414' }],
-            },
-            {
-              featureType: 'landscape.natural',
-              elementType: 'geometry',
-              stylers: [{ color: '#1b221a' }],
-            },
-            {
-              featureType: 'poi',
-              elementType: 'geometry',
-              stylers: [{ color: '#181818' }],
-            },
-            {
-              featureType: 'poi.park',
-              elementType: 'geometry',
-              stylers: [{ color: '#1e291d' }],
-            },
-            {
-              featureType: 'road',
-              elementType: 'geometry',
-              stylers: [{ color: '#4a4a4a' }],
-            },
-            {
-              featureType: 'road.local',
-              elementType: 'geometry',
-              stylers: [{ color: '#383838' }],
-            },
-            {
-              featureType: 'road.arterial',
-              elementType: 'geometry',
-              stylers: [{ color: '#6e6e6e' }],
-            },
-            {
-              featureType: 'road.highway',
-              elementType: 'geometry',
-              stylers: [{ color: '#b8b8b8' }],
-            },
-            {
-              featureType: 'road.highway',
-              elementType: 'geometry.stroke',
-              stylers: [{ color: '#2a2a2a' }, { weight: 1 }],
-            },
-            {
-              featureType: 'transit',
-              stylers: [{ visibility: 'off' }],
-            },
-            {
-              featureType: 'water',
-              elementType: 'geometry',
-              stylers: [{ color: '#000000' }],
-            },
-          ],
+          styles: theme === 'light' ? lightMapStyles : darkMapStyles,
           gestureHandling: 'greedy',
           zoomControl: true,
           mapTypeControl: true,
@@ -292,6 +292,8 @@ export default function MapViewer({
       simulationMarkerRef.current = null;
       simulationPolylineRef.current?.setMap(null);
       simulationPolylineRef.current = null;
+      simulationHaloPolylineRef.current?.setMap(null);
+      simulationHaloPolylineRef.current = null;
       graphSimulationPolylinesRef.current.forEach((polyline) =>
         polyline.setMap(null)
       );
@@ -304,6 +306,12 @@ export default function MapViewer({
       }
     };
   }, []);
+
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (mapStatus !== 'ready' || !map) return;
+    map.setOptions({ styles: theme === 'light' ? lightMapStyles : darkMapStyles });
+  }, [mapStatus, theme]);
 
   useEffect(() => {
     const map = mapInstanceRef.current;
@@ -383,6 +391,8 @@ export default function MapViewer({
     simulationMarkerRef.current = null;
     simulationPolylineRef.current?.setMap(null);
     simulationPolylineRef.current = null;
+    simulationHaloPolylineRef.current?.setMap(null);
+    simulationHaloPolylineRef.current = null;
     graphSimulationPolylinesRef.current.forEach((polyline) =>
       polyline.setMap(null)
     );
@@ -435,17 +445,26 @@ export default function MapViewer({
     if (!sample) return;
 
     if (!simulationPolylineRef.current) {
-      simulationPolylineRef.current = new google.maps.Polyline({
+      simulationHaloPolylineRef.current = new google.maps.Polyline({
         path: [],
         map,
         strokeColor: '#8BAE52',
-        strokeOpacity: 0.95,
-        strokeWeight: 5,
+        strokeOpacity: 0.4,
+        strokeWeight: 11,
+        zIndex: 17,
+      });
+      simulationPolylineRef.current = new google.maps.Polyline({
+        path: [],
+        map,
+        strokeColor: '#A6CA5F',
+        strokeOpacity: 1,
+        strokeWeight: 4,
         zIndex: 18,
       });
     }
 
     const revealedPath = simulationPolylineRef.current.getPath();
+    const revealedHaloPath = simulationHaloPolylineRef.current?.getPath();
     for (
       let pathIndex = simulationLastPathIndexRef.current + 1;
       pathIndex <= sample.pathIndex;
@@ -453,7 +472,9 @@ export default function MapViewer({
     ) {
       const point = simulationPath[pathIndex];
       if (point) {
-        revealedPath.push(new google.maps.LatLng(point));
+        const latLng = new google.maps.LatLng(point);
+        revealedPath.push(latLng);
+        revealedHaloPath?.push(latLng);
       }
     }
     simulationLastPathIndexRef.current = Math.max(
@@ -467,7 +488,9 @@ export default function MapViewer({
       lastPoint.lat !== sample.point.lat ||
       lastPoint.lng !== sample.point.lng
     ) {
-      revealedPath.push(new google.maps.LatLng(sample.point));
+      const samplePoint = new google.maps.LatLng(sample.point);
+      revealedPath.push(samplePoint);
+      revealedHaloPath?.push(samplePoint);
       simulationLastPointRef.current = sample.point;
     }
 
@@ -479,9 +502,9 @@ export default function MapViewer({
         icon: {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 8,
-          fillColor: '#8BAE52',
+          fillColor: '#A6CA5F',
           fillOpacity: 1,
-          strokeColor: '#E8E6DF',
+          strokeColor: '#52783B',
           strokeWeight: 2,
         },
         zIndex: 20,
@@ -516,12 +539,13 @@ export default function MapViewer({
     if (!finalPolyline) return;
 
     finalPolyline.setPath(simulationPath);
+    simulationHaloPolylineRef.current?.setPath(simulationPath);
     simulationMarkerRef.current?.setMap(null);
     simulationMarkerRef.current = null;
 
     const startedAt = performance.now();
-    const initialColor = [82, 120, 59];
-    const finalColor = [139, 174, 82];
+    const initialColor = [139, 174, 82];
+    const finalColor = [166, 202, 95];
     const animateHighlight = (now: number) => {
       const progress = Math.min((now - startedAt) / 400, 1);
       const eased = 1 - (1 - progress) ** 3;
@@ -535,7 +559,12 @@ export default function MapViewer({
       finalPolyline.setOptions({
         strokeColor: `#${color}`,
         strokeOpacity: 0.95 + 0.05 * eased,
-        strokeWeight: 5 + 3 * eased,
+        strokeWeight: 4 + eased * 0.8,
+      });
+      simulationHaloPolylineRef.current?.setOptions({
+        strokeColor: '#8BAE52',
+        strokeOpacity: 0.4 + 0.08 * eased,
+        strokeWeight: 11 + eased,
       });
 
       if (progress < 1) {
@@ -682,7 +711,7 @@ export default function MapViewer({
     graphSimulationPolylinesRef.current.forEach((polyline, edgeId) => {
       polyline.setOptions(
         finalEdges.has(edgeId)
-          ? { strokeColor: '#8BAE52', strokeOpacity: 1, strokeWeight: 6, zIndex: 24 }
+          ? { strokeColor: '#A6CA5F', strokeOpacity: 1, strokeWeight: 5, zIndex: 24 }
           : { strokeColor: '#789747', strokeOpacity: 0.24, strokeWeight: 3, zIndex: 16 }
       );
     });
@@ -714,6 +743,8 @@ export default function MapViewer({
     clearRoutePolylines(routePolylinesRef.current);
     simulationPolylineRef.current?.setMap(null);
     simulationPolylineRef.current = null;
+    simulationHaloPolylineRef.current?.setMap(null);
+    simulationHaloPolylineRef.current = null;
     simulationMarkerRef.current?.setMap(null);
     simulationMarkerRef.current = null;
 
@@ -758,14 +789,23 @@ export default function MapViewer({
 
         const routePath = path.map(({ lat, lng }) => ({ lat, lng }));
         if (directionsRequest.intent === 'find') {
-          const polyline = new google.maps.Polyline({
+          const haloPolyline = new google.maps.Polyline({
             path: routePath,
             map,
             strokeColor: '#8BAE52',
-            strokeOpacity: 0.95,
-            strokeWeight: 7,
+            strokeOpacity: 0.4,
+            strokeWeight: 11,
+            zIndex: 23,
+          });
+          const polyline = new google.maps.Polyline({
+            path: routePath,
+            map,
+            strokeColor: '#A6CA5F',
+            strokeOpacity: 1,
+            strokeWeight: 4.5,
             zIndex: 24,
           });
+          routePolylinesRef.current.push(haloPolyline);
           routePolylinesRef.current.push(polyline);
         }
 

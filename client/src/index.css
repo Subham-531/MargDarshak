@@ -124,3 +124,124 @@ textarea::placeholder {
 .google-map-container {
   color-scheme: dark;
 }
+
+html[data-theme='light'] {
+  color-scheme: light;
+  --page-background: #f3f4ef;
+  --panel-background: #ffffff;
+  --secondary-surface: #eceee8;
+  --primary-text: #242820;
+  --secondary-text: #62685d;
+  --muted-text: #7c8277;
+  --border-color: #d9ddd3;
+  --accent-color: #66883d;
+}
+
+html[data-theme='light'],
+html[data-theme='light'] body,
+html[data-theme='light'] #root {
+  background-color: var(--page-background);
+  color: var(--primary-text);
+}
+
+html[data-theme='light'] .app-shell,
+html[data-theme='light'] .app-shell[data-theme='light'] {
+  background-color: var(--page-background) !important;
+  color: var(--primary-text) !important;
+}
+
+html[data-theme='light'] .app-shell > .pointer-events-none[class*='bg-[#'],
+.app-shell[data-theme='light'] > .pointer-events-none[class*='bg-[#'] {
+  background-color: rgba(102, 136, 61, 0.035) !important;
+}
+
+html[data-theme='light'] [class~='bg-white'],
+html[data-theme='light'] [class*='bg-white/'],
+html[data-theme='light'] [class*='bg-[#'],
+html[data-theme='light'] [class*='bg-gradient-to-'],
+html[data-theme='light'] [class*='bg-ink-'],
+html[data-theme='light'] [class*='bg-purple-'] {
+  background-color: var(--panel-background) !important;
+  background-image: none !important;
+}
+
+html[data-theme='light'] [class*='bg-[#52783B]'],
+html[data-theme='light'] [class*='bg-[#648B43]'],
+html[data-theme='light'] [class*='bg-[#8BAE52]'] {
+  background-color: var(--accent-color) !important;
+}
+
+html[data-theme='light'] [class*='hover:bg-[#']:hover,
+html[data-theme='light'] [class*='hover:bg-white']:hover {
+  background-color: var(--secondary-surface) !important;
+}
+
+html[data-theme='light'] [class*='hover:bg-[#648B43]']:hover {
+  background-color: #789b4c !important;
+}
+
+html[data-theme='light'] [class*='text-ink-900'],
+html[data-theme='light'] [class*='text-ink-800'] {
+  color: var(--primary-text) !important;
+}
+
+html[data-theme='light'] [class*='text-ink-700'],
+html[data-theme='light'] [class*='text-ink-600'],
+html[data-theme='light'] [class*='text-ink-500'],
+html[data-theme='light'] [class*='text-ink-400'] {
+  color: var(--secondary-text) !important;
+}
+
+html[data-theme='light'] [class*='text-purple-'] {
+  color: var(--accent-color) !important;
+}
+
+html[data-theme='light'] [class*='border-white'],
+html[data-theme='light'] [class*='border-ink-'] {
+  border-color: var(--border-color) !important;
+}
+
+html[data-theme='light'] [class*='border-purple-'] {
+  border-color: rgba(102, 136, 61, 0.28) !important;
+}
+
+html[data-theme='light'] input,
+html[data-theme='light'] select,
+html[data-theme='light'] textarea {
+  color-scheme: light;
+  color: var(--primary-text);
+}
+
+html[data-theme='light'] input::placeholder,
+html[data-theme='light'] textarea::placeholder {
+  color: var(--muted-text);
+}
+
+html[data-theme='light'] ::-webkit-scrollbar-track {
+  background: var(--secondary-surface);
+}
+
+html[data-theme='light'] ::-webkit-scrollbar-thumb {
+  background: #c2c8ba;
+}
+
+html[data-theme='light'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+html[data-theme='light'] #root .google-map-container {
+  background: var(--page-background);
+}
+
+html[data-theme='light'] .google-map-node-label {
+  border-color: rgba(102, 136, 61, 0.35);
+  background: rgba(255, 255, 255, 0.96);
+  color: #242820;
+  box-shadow: 0 2px 8px rgba(37, 45, 28, 0.16);
+}
+
+html[data-theme='light'] .google-map-info-window,
+html[data-theme='light'] .google-map-container {
+  color-scheme: light;
+  color: #242820;
+}

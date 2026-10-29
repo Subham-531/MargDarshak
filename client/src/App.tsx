@@ -34,6 +34,8 @@ export interface GraphStats {
   corridorsCount: number;
 }
 
+type Theme = 'dark' | 'light';
+
 const hasCoordinates = (
   node: NodeItem | undefined
 ): node is NodeItem & { lat: number; lng: number } =>
@@ -120,6 +122,16 @@ const sampleRoutePath = (
 };
 
 export default function App() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    try {
+      return window.localStorage.getItem('pathscope-theme') === 'light'
+        ? 'light'
+        : 'dark';
+    } catch (error) {
+      console.warn('Could not read the saved theme preference.', error);
+      return 'dark';
+    }
+  });
   const [nodes, setNodes] = useState<NodeItem[]>([]);
   const [edges, setEdges] = useState<EdgeItem[]>([]);
   const [stats, setStats] = useState<GraphStats | null>(null);
@@ -176,6 +188,15 @@ export default function App() {
       setToast(null);
     }, 6000);
   };
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try {
+      window.localStorage.setItem('pathscope-theme', theme);
+    } catch (error) {
+      console.warn('Could not save the theme preference.', error);
+    }
+  }, [theme]);
 
   const selectMapNode = (node: NodeItem, distanceKm?: number) => {
     if (mapSelectionTarget === 'start') {
@@ -594,7 +615,7 @@ export default function App() {
   };
 
   return (
-    <div className="app-shell relative flex flex-col h-screen w-screen overflow-hidden bg-[#0D0D0D] text-ink-900 select-none">
+    <div data-theme={theme} className="app-shell relative flex flex-col h-screen w-screen overflow-hidden bg-[#0D0D0D] text-ink-900 select-none">
       {/* Ambient background blur orbs */}
       <div className="absolute top-0 left-0 w-96 h-96 rounded-full bg-[#E9DEFF]/40 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#D9F2E6]/40 blur-3xl pointer-events-none" />
@@ -647,6 +668,12 @@ export default function App() {
       <Header
         onOpenCompare={() => setIsCompareOpen(true)}
         onOpenCommandPalette={() => setIsCommandOpen(true)}
+        theme={theme}
+        onToggleTheme={() =>
+          setTheme((currentTheme) =>
+            currentTheme === 'dark' ? 'light' : 'dark'
+          )
+        }
         stats={stats}
       />
 
@@ -686,6 +713,7 @@ export default function App() {
 
         {/* Google Maps base map with PathScope graph overlays */}
         <MapViewer
+          theme={theme}
           nodes={nodes}
           edges={edges}
           directionsRequest={directionsRequest}

@@ -24,6 +24,8 @@ In conventional Data Structures & Algorithms (DSA) courses, graph algorithms are
 
 The control panel's **Compare Algorithms** dialog provides a complexity and shortest-path guarantee reference for Dijkstra, A*, BFS, DFS, and Bellman-Ford. It can be dismissed with its close button, by clicking outside the dialog, or with Escape. The header's existing **Compare** action remains the live Dijkstra-versus-A* comparison for the selected locations.
 
+Use the sun/moon control in the header to switch between the dark olive theme and the light theme. The selection is saved in this browser, and the map styling switches with the interface.
+
 ---
 
 ## 2. System Architecture & Tech Stack
@@ -177,7 +179,13 @@ No Places or Geocoding API is required: locations are selected from the existing
 
 ---
 
-## 8. Viva Q&A Quick Reference
+## 8. Vercel Deployment
+
+The root `vercel.json` configures the Vite frontend (`client/`) and Express API (`server/`) as Vercel services. Deploy the repository from its root; requests under `/api/` are routed to the API service and all other requests go to the frontend. The frontend calls the API through same-origin `/api/...` URLs, so no service binding or hardcoded production API hostname is needed.
+
+Before deploying, add `VITE_GOOGLE_MAPS_API_KEY` to the Vercel project’s Environment Variables for the environments you use (such as Preview and Production). Use the restricted browser key described above, include the deployed hostname in its HTTP referrer restrictions, and redeploy after changing the variable.
+
+## 9. Viva Q&A Quick Reference
 
 1. **Why Adjacency List over Adjacency Matrix?**  
    Road networks are sparse graphs ($E \ll V^2$). Adjacency list takes $O(V+E)$ space instead of $O(V^2)$.
