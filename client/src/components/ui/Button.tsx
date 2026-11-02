@@ -54,21 +54,21 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary:
-        'bg-[#52783B] hover:bg-[#648B43] text-[#F2F0EB] border border-[#688A45] shadow-soft active:shadow-none',
+        'bg-[#52783B] hover:bg-[#648B43] text-[#FFFFFF] border border-[#688A45] shadow-soft active:shadow-none',
       lavender:
-        'bg-[#222222] hover:bg-[#2B2B2B] text-[#DCE5CB] border border-[#344126] shadow-soft',
+        'bg-[#2A3423] hover:bg-[#36422C] text-[#FFFFFF] border border-[#445438] shadow-soft dark:bg-[#222222] dark:hover:bg-[#2B2B2B] dark:text-[#DCE5CB] dark:border-[#344126]',
       peach:
         'bg-[#242424] hover:bg-[#2D2D2D] text-ink-800 border border-ink-200 shadow-soft',
       mint:
         'bg-[#20291C] hover:bg-[#293521] text-emerald-800 border border-emerald-300/40 shadow-soft',
       glass:
-        'bg-[#1C1C1C] hover:bg-[#252525] text-ink-800 border border-ink-200 shadow-pill backdrop-blur-md',
+        'bg-[#262C22] hover:bg-[#323A2D] text-[#FFFFFF] border border-[#3E4738] shadow-pill backdrop-blur-md dark:bg-[#1C1C1C] dark:hover:bg-[#252525] dark:text-ink-800 dark:border-ink-200',
       subtle:
-        'bg-[#1C1C1C] hover:bg-[#252525] text-ink-800 border border-ink-200/70',
+        'bg-white hover:bg-ink-50 text-ink-900 border border-ink-200 shadow-xs dark:bg-[#1C1C1C] dark:hover:bg-[#252525] dark:text-ink-800 dark:border-ink-200/70',
       danger:
         'bg-[#332222] hover:bg-[#402929] text-rose-800 border border-rose-300/40 shadow-soft',
       ghost:
-        'bg-transparent hover:bg-[#222222] text-ink-700 active:bg-[#2B2B2B]',
+        'bg-transparent hover:bg-ink-100 text-ink-700 active:bg-ink-200',
     }[variant];
 
     const motionProps =

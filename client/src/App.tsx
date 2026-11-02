@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
 import ControlPanel, {
@@ -16,12 +16,12 @@ import MapViewer, {
   RouteSample,
 } from './components/MapViewer';
 import AlgorithmTableModal from './components/AlgorithmTableModal';
-import CompareModal from './components/CompareModal';
 import VivaGuideModal from './components/VivaGuideModal';
 import TestRunnerModal from './components/TestRunnerModal';
 import { CommandPalette } from './components/ui';
-import { AlertCircle, CheckCircle, Info, X } from 'lucide-react';
+import { AlertCircle, CheckCircle, Info, X, PanelLeftOpen, PanelLeftClose } from 'lucide-react';
 import { springSoft, fadeUp } from './lib/motion';
+import { apiUrl } from './lib/api';
 
 export interface ToastNotification {
   message: string;
@@ -139,8 +139,9 @@ export default function App() {
     useState<MapSelectionTarget>('start');
 
   // Route planning state
-  const [startNode, setStartNode] = useState('CHD17'); // Default: Sector 17 Plaza
-  const [destNode, setDestNode] = useState('SML');     // Default: Shimla The Ridge
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
+  const [startNode, setStartNode] = useState('DEL'); // Default: New Delhi
+  const [destNode, setDestNode] = useState('MUM');   // Default: Mumbai
   const [stops, setStops] = useState<string[]>([]);
   const [mode, setMode] = useState('distance');
 
@@ -165,6 +166,15 @@ export default function App() {
   const [simulationDelay, setSimulationDelay] = useState(50);
   const [simulationPath, setSimulationPath] =
     useState<google.maps.LatLngLiteral[]>([]);
+  const [travelVehicle, setTravelVehicle] = useState<'car' | 'bike' | 'foot'>('car');
+  const latestRouteGeometryRef = useRef<{
+    path: google.maps.LatLngLiteral[];
+    distanceKm: number;
+  } | null>(null);
+
+  useEffect(() => {
+    latestRouteGeometryRef.current = null;
+  }, [startNode, destNode, stops]);
   const isWorkflowBusy =
     isLoading ||
     simulationStatus === 'preparing' ||
@@ -173,7 +183,6 @@ export default function App() {
     simulationStatus === 'finalizing';
 
   // Modals
-  const [isCompareOpen, setIsCompareOpen] = useState(false);
   const [isAlgorithmTableOpen, setIsAlgorithmTableOpen] = useState(false);
   const [isVivaOpen, setIsVivaOpen] = useState(false);
   const [isTestsOpen, setIsTestsOpen] = useState(false);
@@ -215,7 +224,7 @@ export default function App() {
     if (isWorkflowBusy) return;
     try {
       const response = await fetch(
-        `/api/nodes/nearest?lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}`
+        apiUrl(`/api/nodes/nearest?lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}`)
       );
       const data = await response.json();
       if (!response.ok || !data.success || !data.node) {
@@ -291,7 +300,7 @@ export default function App() {
   useEffect(() => {
     const fetchGraph = async () => {
       try {
-        const res = await fetch('/api/graph');
+        const res = await fetch(apiUrl('/api/graph'));
         const data = await res.json();
         if (data.success) {
           setNodes(data.nodes);
@@ -322,7 +331,7 @@ export default function App() {
       async (pos) => {
         try {
           const { latitude, longitude } = pos.coords;
-          const res = await fetch(`/api/nodes/nearest?lat=${latitude}&lng=${longitude}`);
+          const res = await fetch(apiUrl(`/api/nodes/nearest?lat=${latitude}&lng=${longitude}`));
           const data = await res.json();
 
           if (isWorkflowBusy) return;
@@ -414,6 +423,10 @@ export default function App() {
 
   const handleFindRoute = () => {
     if (isWorkflowBusy) return;
+    if (simulationMode === 'graph') {
+      handleGraphSimulation();
+      return;
+    }
     const request = createDirectionsRequest('find');
     if (!request) return;
 
@@ -436,13 +449,13 @@ export default function App() {
 
     try {
       for (let legIndex = 0; legIndex < selectedStops.length - 1; legIndex += 1) {
-        const response = await fetch('/api/route', {
+        const response = await fetch(apiUrl('/api/route'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             from: selectedStops[legIndex],
             to: selectedStops[legIndex + 1],
-            algorithm: 'astar',
+            algorithm: 'dijkstra',
             mode,
             includeTrace: true,
           }),
@@ -494,12 +507,12 @@ export default function App() {
 
       setRouteResult({
         found: true,
-        provider: 'PathScope Graph',
+        provider: 'MargDarshak Graph',
         mode: mode === 'time' ? 'time' : 'distance',
         distanceKm,
         timeMin,
         nodesExplored,
-        algorithm: 'A*',
+        algorithm: 'Dijkstra',
         path: routePath,
       });
       setGraphSimulationFrames(frames);
@@ -510,7 +523,7 @@ export default function App() {
       setIsLoading(false);
       setSimulationStatus('running');
       showToast(
-        `A* graph search ready with ${frames.length} steps. Animating straight graph edges.`,
+        `Dijkstra graph simulation ready with ${frames.length} exploration steps. Animating uniform cost search.`,
         'info'
       );
     } catch (error: unknown) {
@@ -538,6 +551,33 @@ export default function App() {
       return;
     }
 
+    // Fast replay if route geometry is already available in road mode
+    if (
+      simulationMode === 'road' &&
+      latestRouteGeometryRef.current &&
+      latestRouteGeometryRef.current.path.length > 0
+    ) {
+      const { path, distanceKm } = latestRouteGeometryRef.current;
+      try {
+        const samples = sampleRoutePath(path, distanceKm * 1000);
+        setSimulationRunId((runId) => runId + 1);
+        setSimulationPath(path);
+        setSimulationFrames(samples);
+        setSimulationStepIndex(0);
+        setSimulationStatus('running');
+        const vehicleLabel =
+          travelVehicle === 'bike'
+            ? '🏍️ Motorbike'
+            : travelVehicle === 'foot'
+              ? '🚶 Walking'
+              : '🚗 Car';
+        showToast(`Starting ${vehicleLabel} simulation.`, 'info');
+        return;
+      } catch (err) {
+        // Fall back to refetching route
+      }
+    }
+
     const request = createDirectionsRequest('simulate');
     if (!request) return;
 
@@ -553,6 +593,54 @@ export default function App() {
     }
   };
 
+  const handleSelectTravelVehicle = (vehicle: 'car' | 'bike' | 'foot') => {
+    setTravelVehicle(vehicle);
+
+    if (simulationMode !== 'road') {
+      setSimulationMode('road');
+    }
+
+    const vehicleLabel =
+      vehicle === 'bike'
+        ? '🏍️ Motorbike'
+        : vehicle === 'foot'
+          ? '🚶 Walking'
+          : '🚗 Car';
+
+    // If route geometry is already present, immediately animate selected vehicle!
+    if (
+      latestRouteGeometryRef.current &&
+      latestRouteGeometryRef.current.path.length > 0
+    ) {
+      const { path, distanceKm } = latestRouteGeometryRef.current;
+      try {
+        const samples = sampleRoutePath(path, distanceKm * 1000);
+        setSimulationRunId((runId) => runId + 1);
+        setSimulationPath(path);
+        setSimulationFrames(samples);
+        setSimulationStepIndex(0);
+        setSimulationStatus('running');
+        showToast(`Starting ${vehicleLabel} simulation.`, 'info');
+        return;
+      } catch (err) {
+        // Fall back to fetch
+      }
+    }
+
+    // Otherwise initiate directions request and simulate
+    if (!isWorkflowBusy) {
+      const request = createDirectionsRequest('simulate');
+      if (!request) return;
+
+      resetSimulation();
+      setRouteResult(null);
+      setDirectionsError(null);
+      setIsLoading(true);
+      setSimulationStatus('preparing');
+      setDirectionsRequest(request);
+    }
+  };
+
   const handlePauseSimulation = () => {
     if (simulationStatus === 'running') {
       setSimulationStatus('paused');
@@ -564,6 +652,11 @@ export default function App() {
     path: google.maps.LatLngLiteral[],
     intent: DirectionsRouteRequest['intent']
   ) => {
+    latestRouteGeometryRef.current = {
+      path,
+      distanceKm: summary.distanceKm,
+    };
+
     setRouteResult({
       found: true,
       provider: 'Google Maps',
@@ -583,7 +676,13 @@ export default function App() {
         setSimulationFrames(samples);
         setSimulationStepIndex(0);
         setSimulationStatus('running');
-        showToast('Google driving route found. Starting route simulation.', 'info');
+        const vehicleLabel =
+          travelVehicle === 'bike'
+            ? '🏍️ Motorbike'
+            : travelVehicle === 'foot'
+              ? '🚶 Walking'
+              : '🚗 Car';
+        showToast(`Google driving route found. Starting ${vehicleLabel} simulation.`, 'info');
       } catch (error: unknown) {
         const message =
           error instanceof Error
@@ -597,7 +696,7 @@ export default function App() {
     }
 
     setSimulationStatus('idle');
-    showToast('Google Maps driving route found.', 'success');
+    showToast('Google Maps driving route found. Click Bike, Car, or Simulate to animate.', 'success');
   };
 
   const handleDirectionsError = (
@@ -611,8 +710,15 @@ export default function App() {
     setDirectionsError(actionableMessage);
     setIsLoading(false);
     setSimulationStatus(intent === 'simulate' ? 'error' : 'idle');
-    showToast(`Could not calculate a driving route: ${actionableMessage}`, 'error');
+    showToast(`Google Directions unavailable: ${actionableMessage}. Using MargDarshak Graph calculation...`, 'warning');
+    handleGraphSimulation();
   };
+
+  const handleOpenCommandPalette = useCallback(() => setIsCommandOpen(true), []);
+  const handleToggleTheme = useCallback(() => {
+    setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'));
+  }, []);
+  const handleOpenAlgorithmTable = useCallback(() => setIsAlgorithmTableOpen(true), []);
 
   return (
     <div data-theme={theme} className="app-shell relative flex flex-col h-screen w-screen overflow-hidden bg-[#0D0D0D] text-ink-900 select-none">
@@ -666,52 +772,81 @@ export default function App() {
 
       {/* Top Floating Application Header */}
       <Header
-        onOpenCompare={() => setIsCompareOpen(true)}
-        onOpenCommandPalette={() => setIsCommandOpen(true)}
         theme={theme}
-        onToggleTheme={() =>
-          setTheme((currentTheme) =>
-            currentTheme === 'dark' ? 'light' : 'dark'
-          )
-        }
+        onToggleTheme={handleToggleTheme}
         stats={stats}
+        isPanelOpen={isPanelOpen}
+        onTogglePanel={() => setIsPanelOpen((prev) => !prev)}
       />
 
       {/* Main Content Workspace */}
       <div className="flex flex-col md:flex-row flex-1 min-h-0 overflow-y-auto md:overflow-hidden relative">
         {/* Left Floating Control Panel */}
-        <ControlPanel
-          nodes={nodes}
-          startNode={startNode}
-          setStartNode={setStartNode}
-          destNode={destNode}
-          setDestNode={setDestNode}
-          stops={stops}
-          setStops={setStops}
-          onFindRoute={handleFindRoute}
-          onOpenAlgorithmTable={() => setIsAlgorithmTableOpen(true)}
-          onStartSimulation={handleStartSimulation}
-          onPauseSimulation={handlePauseSimulation}
-          simulationStatus={simulationStatus}
-          simulationMode={simulationMode}
-          setSimulationMode={setSimulationMode}
-          simulationDelay={simulationDelay}
-          setSimulationDelay={setSimulationDelay}
-          simulationStep={simulationStepIndex}
-          simulationTotalSteps={
-            simulationMode === 'graph'
-              ? graphSimulationFrames.length
-              : simulationFrames.length
-          }
-          isBusy={isWorkflowBusy}
-          isLoading={isLoading}
-          onUseCurrentLocation={handleUseCurrentLocation}
-          isLocating={isLocating}
-          routeResult={routeResult}
-          routeError={directionsError}
-        />
+        <AnimatePresence>
+          {isPanelOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: -40, width: 0 }}
+              animate={{ opacity: 1, x: 0, width: 'auto' }}
+              exit={{ opacity: 0, x: -40, width: 0 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              className="shrink-0 flex"
+            >
+              <ControlPanel
+                nodes={nodes}
+                startNode={startNode}
+                setStartNode={setStartNode}
+                destNode={destNode}
+                setDestNode={setDestNode}
+                stops={stops}
+                setStops={setStops}
+                onFindRoute={handleFindRoute}
+                onOpenAlgorithmTable={handleOpenAlgorithmTable}
+                onStartSimulation={handleStartSimulation}
+                onPauseSimulation={handlePauseSimulation}
+                simulationStatus={simulationStatus}
+                simulationMode={simulationMode}
+                setSimulationMode={setSimulationMode}
+                simulationDelay={simulationDelay}
+                setSimulationDelay={setSimulationDelay}
+                simulationStep={simulationStepIndex}
+                simulationTotalSteps={
+                  simulationMode === 'graph'
+                    ? graphSimulationFrames.length
+                    : simulationFrames.length
+                }
+                isBusy={isWorkflowBusy}
+                isLoading={isLoading}
+                onUseCurrentLocation={handleUseCurrentLocation}
+                isLocating={isLocating}
+                routeResult={routeResult}
+                routeError={directionsError}
+                travelVehicle={travelVehicle}
+                onSelectTravelVehicle={handleSelectTravelVehicle}
+                onToggleOpen={() => setIsPanelOpen(false)}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Google Maps base map with PathScope graph overlays */}
+        {/* Floating Open Panel Button when panel is collapsed */}
+        <AnimatePresence>
+          {!isPanelOpen && (
+            <motion.button
+              type="button"
+              initial={{ opacity: 0, x: -20, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -20, scale: 0.9 }}
+              onClick={() => setIsPanelOpen(true)}
+              className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#141416]/95 hover:bg-[#1E1E22] text-white border border-white/15 shadow-2xl backdrop-blur-xl text-xs font-bold transition-all cursor-pointer group select-none active:scale-95"
+              title="Open Route Planner"
+            >
+              <PanelLeftOpen className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+              <span>Route Planner</span>
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        {/* Google Maps base map with MargDarshak graph overlays */}
         <MapViewer
           theme={theme}
           nodes={nodes}
@@ -733,10 +868,13 @@ export default function App() {
           selectionEnabled={!isWorkflowBusy}
           startNodeId={startNode}
           destNodeId={destNode}
+          travelVehicle={travelVehicle}
           selectionTarget={mapSelectionTarget}
           onSelectionTargetChange={setMapSelectionTarget}
           onNodeClick={(node) => selectMapNode(node)}
           onMapClick={handleMapLocationSelect}
+          isPanelOpen={isPanelOpen}
+          onTogglePanel={() => setIsPanelOpen((prev) => !prev)}
         />
       </div>
 
@@ -744,16 +882,6 @@ export default function App() {
       <AlgorithmTableModal
         isOpen={isAlgorithmTableOpen}
         onClose={() => setIsAlgorithmTableOpen(false)}
-      />
-
-      <CompareModal
-        isOpen={isCompareOpen}
-        onClose={() => setIsCompareOpen(false)}
-        startNode={startNode}
-        destNode={destNode}
-        mode={mode}
-        avoidHighways={false}
-        nodes={nodes}
       />
 
       <VivaGuideModal
@@ -777,7 +905,6 @@ export default function App() {
           if (intermediateStops) setStops(intermediateStops);
         }}
         onSelectMode={(m) => setMode(m)}
-        onOpenCompare={() => setIsCompareOpen(true)}
         onOpenViva={() => setIsVivaOpen(true)}
         onOpenTests={() => setIsTestsOpen(true)}
       />

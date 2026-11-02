@@ -17,7 +17,7 @@ export default function VivaGuideModal({ isOpen, onClose }) {
             </div>
             <div>
               <h2 className="text-sm font-bold text-slate-100">
-                PathScope DSA Reference & University Viva Guide
+                MargDarshak DSA Reference & University Viva Guide
               </h2>
               <p className="text-[11px] text-slate-400">
                 Subject: Data Structures & Algorithms · B.E. CSE, Chandigarh University
@@ -211,7 +211,7 @@ export default function VivaGuideModal({ isOpen, onClose }) {
                   Q1: Why does Dijkstra fail on negative edge weights, and did you handle that?
                 </span>
                 <p>
-                  Dijkstra is a greedy algorithm that settles the shortest distance to a node the moment it is popped from the priority queue, assuming no future edge can decrease that distance. Negative edge weights violate this greedy invariant. In PathScope, all weights represent physical road distances (km) and travel durations (minutes), which are strictly positive. Our graph loader validates at startup and explicitly rejects any edge with distance &le; 0 or speed &le; 0 (verified by Test T6).
+                  Dijkstra is a greedy algorithm that settles the shortest distance to a node the moment it is popped from the priority queue, assuming no future edge can decrease that distance. Negative edge weights violate this greedy invariant. In MargDarshak, all weights represent physical road distances (km) and travel durations (minutes), which are strictly positive. Our graph loader validates at startup and explicitly rejects any edge with distance &le; 0 or speed &le; 0 (verified by Test T6).
                 </p>
               </div>
 
@@ -226,10 +226,10 @@ export default function VivaGuideModal({ isOpen, onClose }) {
 
               <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-2">
                 <span className="font-bold text-purple-400 block">
-                  Q3: Why do "Shortest Distance" and "Fastest Time" yield different paths between Chandigarh and Himachal?
+                  Q3: Why do "Shortest Distance" and "Fastest Time" yield different paths on Indian highways and mountain routes?
                 </span>
                 <p>
-                  Hill roads (e.g., through Kasauli or Chail) have shorter physical distance or tighter curves, but vehicle speeds are limited to 25–30 km/h due to hairpin bends. National Highways (e.g. NH5 Himalayan Expressway and Kiratpur-Nerchowk Fourlane) may take a slightly longer detour in kilometers, but allow speeds of 60–80 km/h, resulting in significantly lower travel times.
+                  National Highways and Expressways allow higher cruising speeds (80–100 km/h), meaning a slightly longer route via major 4/6-lane highways is often significantly faster in time than a physically shorter local road or winding mountain route where speeds drop to 25–40 km/h.
                 </p>
               </div>
 

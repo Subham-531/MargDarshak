@@ -11,9 +11,13 @@ import {
   Route,
   Compass,
   AlertCircle,
-  GitCompare,
+  Car,
+  Bike,
+  Footprints,
+  PanelLeftClose,
+  Sliders,
 } from 'lucide-react';
-import { Button, Card, KpiTile, MotionList, MotionListItem, EmptyState } from './ui';
+import { Button, KpiTile, MotionList, MotionListItem, EmptyState } from './ui';
 import { springSoft, fadeUp } from '../lib/motion';
 import { cn } from '../lib/utils';
 
@@ -54,6 +58,7 @@ export interface ControlPanelProps {
   startNode: string;
   setStartNode: (id: string) => void;
   destNode: string;
+  destNode: string;
   setDestNode: (id: string) => void;
   stops?: string[];
   setStops: (stops: string[]) => void;
@@ -74,9 +79,46 @@ export interface ControlPanelProps {
   isLocating: boolean;
   routeResult?: RouteResult | null;
   routeError?: string | null;
+  travelVehicle?: 'car' | 'bike' | 'foot';
+  onSelectTravelVehicle?: (vehicle: 'car' | 'bike' | 'foot') => void;
+  onToggleOpen?: () => void;
+  blockedNodes?: string[];
+  onToggleBlockNode?: (id: string) => void;
+  onClearBlockedNodes?: () => void;
 }
 
-export default function ControlPanel({
+function formatDuration(
+  minutes: number,
+  allowDays = false
+): { value: string; unit: string; full: string } {
+  if (!Number.isFinite(minutes) || minutes <= 0) {
+    return { value: '0', unit: 'min', full: '0 min' };
+  }
+  const totalMins = Math.round(minutes);
+  if (totalMins < 60) {
+    return { value: `${totalMins}`, unit: 'min', full: `${totalMins} min` };
+  }
+  const hours = Math.floor(totalMins / 60);
+  const remainingMins = totalMins % 60;
+
+  if (allowDays && hours >= 48) {
+    const days = Math.floor(hours / 24);
+    const remHours = hours % 24;
+    return {
+      value: `${days}d ${remHours}`,
+      unit: 'hrs',
+      full: `${days}d ${remHours}h`,
+    };
+  }
+
+  return {
+    value: `${hours}h ${remainingMins}`,
+    unit: 'min',
+    full: `${hours}h ${remainingMins}m`,
+  };
+}
+
+function ControlPanel({
   nodes = [],
   startNode,
   setStartNode,
@@ -101,6 +143,12 @@ export default function ControlPanel({
   isLocating,
   routeResult,
   routeError,
+  travelVehicle = 'car',
+  onSelectTravelVehicle,
+  onToggleOpen,
+  blockedNodes = [],
+  onToggleBlockNode,
+  onClearBlockedNodes,
 }: ControlPanelProps) {
   const prefersReducedMotion = useReducedMotion();
 
@@ -126,7 +174,6 @@ export default function ControlPanel({
     setStops(stops.filter((_, i) => i !== index));
   };
 
-  // Quick preset loader
   const loadPreset = (
     startId: string,
     destId: string,
@@ -137,430 +184,652 @@ export default function ControlPanel({
     setStops(optStops);
   };
 
+  const isSimulating =
+    simulationStatus === 'running' ||
+    simulationStatus === 'paused' ||
+    simulationStatus === 'finalizing';
+
   return (
-    <aside className="w-full md:w-96 p-3 md:p-4 md:pr-2 flex flex-col h-[46vh] min-h-[280px] md:h-[calc(100vh-5.5rem)] z-20 shrink-0 select-none">
-      <div className="flex-1 bg-white/80 backdrop-blur-xl border border-white/80 rounded-3xl shadow-soft-xl flex flex-col overflow-hidden">
-        <div className="p-4 overflow-y-auto space-y-4 flex-1">
-          {/* Preset Chips */}
+    <aside className="w-full md:w-[380px] lg:w-[410px] p-2.5 md:p-3 flex flex-col h-[48vh] min-h-[300px] md:h-[calc(100vh-5.5rem)] z-20 shrink-0 select-none">
+      <div className="flex-1 bg-[#141416]/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-soft-xl flex flex-col overflow-hidden text-ink-100">
+        
+        {/* Panel Header */}
+        <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-emerald-400 shadow-xs">
+              <Compass className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-xs font-extrabold text-white tracking-wide uppercase">
+                Route Planner
+              </h2>
+              <p className="text-[10px] text-ink-400 font-medium">
+                135 Nodes · Chandigarh & National
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            {onToggleOpen && (
+              <button
+                type="button"
+                onClick={onToggleOpen}
+                className="p-1.5 rounded-xl hover:bg-white/10 text-ink-400 hover:text-white border border-transparent hover:border-white/10 transition cursor-pointer"
+                title="Collapse sidebar (Full screen map)"
+              >
+                <PanelLeftClose className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Scrollable Body */}
+        <div className="p-3.5 overflow-y-auto space-y-3 flex-1 custom-scrollbar">
+          
+          {/* Quick Route Presets Horizontal Bar */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-ink-400">
+            <div className="flex items-center justify-between mb-1.5 px-0.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-ink-400">
                 Popular Routes
               </span>
-              <span className="text-[10px] text-purple-700 font-semibold px-2 py-0.5 rounded-full bg-[#E9DEFF]/60 border border-purple-200/50">
-                Quick Pick
-              </span>
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
               <button
                 type="button"
-                onClick={() => loadPreset('CHD17', 'SML')}
+                onClick={() => loadPreset('DEL', 'MUM')}
                 disabled={isBusy}
-                className="text-[11px] font-medium px-3 py-1 rounded-full bg-white/90 hover:bg-[#F5EEFF] text-ink-800 border border-ink-100 hover:border-purple-200 shadow-pill transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 text-ink-300 hover:text-white border border-white/10 hover:border-white/20 whitespace-nowrap transition cursor-pointer disabled:opacity-50"
               >
-                S17 → Shimla
+                Delhi → Mumbai
               </button>
               <button
                 type="button"
-                onClick={() => loadPreset('CHD17', 'MNL')}
+                onClick={() => loadPreset('DEL', 'BLR')}
                 disabled={isBusy}
-                className="text-[11px] font-medium px-3 py-1 rounded-full bg-white/90 hover:bg-[#FFF3EB] text-ink-800 border border-ink-100 hover:border-orange-200 shadow-pill transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 text-ink-300 hover:text-white border border-white/10 hover:border-white/20 whitespace-nowrap transition cursor-pointer disabled:opacity-50"
               >
-                S17 → Manali
+                Delhi → Bengaluru
               </button>
               <button
                 type="button"
-                onClick={() => loadPreset('CU_GHR', 'SML')}
+                onClick={() => loadPreset('MUM', 'GOA')}
                 disabled={isBusy}
-                className="text-[11px] font-medium px-3 py-1 rounded-full bg-white/90 hover:bg-[#EDFAF3] text-ink-800 border border-ink-100 hover:border-emerald-200 shadow-pill transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 text-ink-300 hover:text-white border border-white/10 hover:border-white/20 whitespace-nowrap transition cursor-pointer disabled:opacity-50"
               >
-                CU Gharuan → Shimla
+                Mumbai → Goa
               </button>
               <button
                 type="button"
-                onClick={() => loadPreset('CHD17', 'CHD_AIR')}
+                onClick={() => loadPreset('KOL', 'CHE')}
                 disabled={isBusy}
-                className="text-[11px] font-medium px-3 py-1 rounded-full bg-white/90 hover:bg-[#F5EEFF] text-ink-800 border border-ink-100 hover:border-purple-200 shadow-pill transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 text-ink-300 hover:text-white border border-white/10 hover:border-white/20 whitespace-nowrap transition cursor-pointer disabled:opacity-50"
               >
-                S17 → Airport
+                Kolkata → Chennai
               </button>
               <button
                 type="button"
-                onClick={() => loadPreset('CHD17', 'KFR', ['PKL_S5', 'SOL'])}
+                onClick={() => loadPreset('DEL', 'SML')}
                 disabled={isBusy}
-                className="text-[11px] font-semibold px-3 py-1 rounded-full bg-gradient-to-r from-[#E9DEFF]/80 to-[#D9F2E6]/80 hover:from-[#E1D2FF] hover:to-[#CEEEDC] text-ink-900 border border-purple-200/60 shadow-pill transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 text-ink-300 hover:text-white border border-white/10 hover:border-white/20 whitespace-nowrap transition cursor-pointer disabled:opacity-50"
               >
-                Multi-Stop: S17 → Kufri
+                Delhi → Shimla
+              </button>
+              <button
+                type="button"
+                onClick={() => loadPreset('DEL', 'CHE', ['JAI', 'HYD'])}
+                disabled={isBusy}
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-gradient-to-r from-purple-500/20 to-emerald-500/20 text-purple-200 border border-purple-400/30 whitespace-nowrap transition cursor-pointer disabled:opacity-50"
+              >
+                Multi-Stop
               </button>
             </div>
           </div>
 
-          {/* Route Origin & Destination Card */}
-          <div className="bg-gradient-to-b from-white/95 to-[#FAF8FE]/90 p-3.5 rounded-2xl border border-white/90 shadow-soft space-y-3">
-            {/* Start Node */}
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-ink-800 flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-4 ring-emerald-100"></span>
-                  Start Location
-                </label>
-                <button
-                  type="button"
-                  onClick={onUseCurrentLocation}
-                  disabled={isLocating || isBusy}
-                  className="text-[11px] font-semibold text-purple-700 hover:text-purple-900 flex items-center gap-1 transition disabled:opacity-50 cursor-pointer"
-                >
-                  <Navigation
-                    className={cn('w-3 h-3', isLocating && 'animate-spin')}
-                  />
-                  <span>{isLocating ? 'Locating...' : 'My Location'}</span>
-                </button>
+          {/* Connected Origin & Destination Card */}
+          <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-3 space-y-2.5 shadow-xs relative">
+            <div className="flex gap-2.5 items-stretch">
+              
+              {/* Left Route Track Line */}
+              <div className="flex flex-col items-center justify-between py-2 shrink-0 w-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-4 ring-emerald-500/20" />
+                <div className="w-0.5 flex-1 bg-white/15 my-1 rounded-full" />
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 ring-4 ring-rose-500/20" />
               </div>
 
-              <select
-                value={startNode}
-                onChange={(e) => setStartNode(e.target.value)}
-                disabled={isBusy}
-                className="w-full bg-white/90 border border-ink-200/80 rounded-xl px-3 py-2 text-xs font-semibold text-ink-900 focus:outline-none focus:ring-2 focus:ring-purple-300 shadow-xs"
-              >
-                <option value="">Select start place...</option>
-                {nodes.map((n) => (
-                  <option key={n.id} value={n.id}>
-                    {n.name} ({n.region})
-                  </option>
-                ))}
-              </select>
+              {/* Inputs Column */}
+              <div className="flex-1 space-y-2">
+                {/* Start Location Input */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] font-bold text-ink-400 uppercase tracking-wider">
+                      Origin
+                    </span>
+                    <button
+                      type="button"
+                      onClick={onUseCurrentLocation}
+                      disabled={isLocating || isBusy}
+                      className="text-[10px] font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 transition disabled:opacity-50 cursor-pointer"
+                    >
+                      <Navigation className={cn('w-2.5 h-2.5', isLocating && 'animate-spin')} />
+                      <span>{isLocating ? 'Locating...' : 'My Location'}</span>
+                    </button>
+                  </div>
+                  <select
+                    value={startNode}
+                    onChange={(e) => setStartNode(e.target.value)}
+                    disabled={isBusy}
+                    className="w-full bg-[#1C1C20] border border-white/10 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-inner"
+                  >
+                    <option value="">Select origin...</option>
+                    {nodes.map((n) => (
+                      <option key={n.id} value={n.id} className="bg-[#18181A] text-white">
+                        {n.name} ({n.region})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Optional Stops */}
+                {stops.length > 0 && (
+                  <MotionList className="space-y-1.5 pt-1">
+                    {stops.map((stop, index) => (
+                      <MotionListItem key={index} className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                        <select
+                          value={stop}
+                          onChange={(e) => updateStop(index, e.target.value)}
+                          disabled={isBusy}
+                          className="flex-1 bg-[#1C1C20] border border-white/10 rounded-xl px-2.5 py-1.5 text-xs font-medium text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                        >
+                          <option value="">Select stop {index + 1}...</option>
+                          {nodes.map((n) => (
+                            <option key={n.id} value={n.id} className="bg-[#18181A] text-white">
+                              {n.name} ({n.region})
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          type="button"
+                          onClick={() => removeStop(index)}
+                          disabled={isBusy}
+                          className="p-1.5 text-ink-400 hover:text-rose-400 transition cursor-pointer rounded-lg hover:bg-rose-500/10"
+                          title="Remove stop"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </MotionListItem>
+                    ))}
+                  </MotionList>
+                )}
+
+                {/* Destination Input */}
+                <div>
+                  <span className="text-[10px] font-bold text-ink-400 uppercase tracking-wider block mb-1">
+                    Destination
+                  </span>
+                  <select
+                    value={destNode}
+                    onChange={(e) => setDestNode(e.target.value)}
+                    disabled={isBusy}
+                    className="w-full bg-[#1C1C20] border border-white/10 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none focus:ring-2 focus:ring-rose-500/50 shadow-inner"
+                  >
+                    <option value="">Select destination...</option>
+                    {nodes.map((n) => (
+                      <option key={n.id} value={n.id} className="bg-[#18181A] text-white">
+                        {n.name} ({n.region})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Floating Swap Button */}
+              <div className="flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={handleSwap}
+                  disabled={isBusy}
+                  className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-ink-300 hover:text-white border border-white/10 transition cursor-pointer shadow-xs"
+                  title="Swap Origin and Destination"
+                >
+                  <ArrowUpDown className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
 
-            {/* Swap & Add Waypoint Row */}
-            <div className="flex items-center justify-between px-1">
-              <motion.button
-                type="button"
-                whileTap={!prefersReducedMotion ? { scale: 0.9 } : undefined}
-                whileHover={!prefersReducedMotion ? { rotate: 180 } : undefined}
-                transition={springSoft}
-                onClick={handleSwap}
-                disabled={isBusy}
-                className="p-1.5 rounded-full bg-white text-ink-600 hover:text-ink-900 border border-ink-200/80 shadow-xs cursor-pointer"
-                title="Swap Start and Destination"
-              >
-                <ArrowUpDown className="w-3.5 h-3.5" />
-              </motion.button>
-
+            {/* Add Stop Button */}
+            <div className="flex items-center justify-end pt-1">
               <button
                 type="button"
                 onClick={addStop}
                 disabled={isBusy || stops.length >= 5}
-                className="text-[11px] font-semibold text-purple-700 hover:text-purple-900 flex items-center gap-1 transition cursor-pointer"
+                className="text-[11px] font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1 transition cursor-pointer disabled:opacity-40"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Add Stop ({stops.length}/5)</span>
+                <span>Add Waypoint ({stops.length}/5)</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Mode & Vehicle Segmented Controls */}
+          <div className="space-y-2">
+            {/* Routing Mode Toggle */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-1 grid grid-cols-2 gap-1 text-center">
+              <button
+                type="button"
+                onClick={() => setSimulationMode('road')}
+                disabled={isBusy}
+                className={cn(
+                  'py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5',
+                  simulationMode === 'road'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 shadow-xs'
+                    : 'text-ink-400 hover:text-white hover:bg-white/5 border border-transparent'
+                )}
+              >
+                <span>🛣️</span>
+                <span>Road Driving</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSimulationMode('graph')}
+                disabled={isBusy}
+                className={cn(
+                  'py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5',
+                  simulationMode === 'graph'
+                    ? 'bg-purple-500/20 text-purple-300 border border-purple-400/40 shadow-xs'
+                    : 'text-ink-400 hover:text-white hover:bg-white/5 border border-transparent'
+                )}
+              >
+                <span>⚡</span>
+                <span>DSA Graph (Dijkstra)</span>
               </button>
             </div>
 
-            {/* Intermediate Stops List with Framer Motion layout animations */}
-            {stops.length > 0 && (
-              <MotionList className="space-y-2">
-                {stops.map((stop, index) => (
-                  <MotionListItem
-                    key={index}
-                    className="flex items-center gap-2 pl-2 border-l-2 border-amber-300"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-amber-400 ring-2 ring-amber-100"></span>
-                    <select
-                      value={stop}
-                      onChange={(e) => updateStop(index, e.target.value)}
-                      disabled={isBusy}
-                      className="flex-1 bg-white/90 border border-ink-200/80 rounded-xl px-2.5 py-1.5 text-xs font-medium text-ink-900 focus:outline-none focus:ring-2 focus:ring-amber-300 shadow-xs"
-                    >
-                      <option value="">Select stop {index + 1}...</option>
-                      {nodes.map((n) => (
-                        <option key={n.id} value={n.id}>
-                          {n.name} ({n.region})
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      type="button"
-                      onClick={() => removeStop(index)}
-                      disabled={isBusy}
-                      className="p-1.5 text-ink-400 hover:text-rose-600 transition cursor-pointer rounded-full hover:bg-rose-50"
-                      title="Remove Stop"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </MotionListItem>
-                ))}
-              </MotionList>
-            )}
-
-            {/* Destination Node */}
-            <div>
-              <label className="text-xs font-bold text-ink-800 flex items-center gap-1.5 mb-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-400 ring-4 ring-rose-100"></span>
-                Destination
-              </label>
-              <select
-                value={destNode}
-                onChange={(e) => setDestNode(e.target.value)}
-                disabled={isBusy}
-                className="w-full bg-white/90 border border-ink-200/80 rounded-xl px-3 py-2 text-xs font-semibold text-ink-900 focus:outline-none focus:ring-2 focus:ring-rose-300 shadow-xs"
+            {/* Travel Vehicle Selector */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-1 grid grid-cols-3 gap-1 text-center">
+              <button
+                type="button"
+                onClick={() => onSelectTravelVehicle?.('car')}
+                className={cn(
+                  'py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5',
+                  travelVehicle === 'car'
+                    ? 'bg-blue-500/25 text-blue-300 border border-blue-400/40 shadow-xs'
+                    : 'text-ink-400 hover:text-white hover:bg-white/5 border border-transparent'
+                )}
               >
-                <option value="">Select destination...</option>
-                {nodes.map((n) => (
-                  <option key={n.id} value={n.id}>
-                    {n.name} ({n.region})
-                  </option>
-                ))}
-              </select>
+                <Car className="w-3.5 h-3.5" />
+                <span>Car</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onSelectTravelVehicle?.('bike')}
+                className={cn(
+                  'py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5',
+                  travelVehicle === 'bike'
+                    ? 'bg-rose-500/25 text-rose-300 border border-rose-400/40 shadow-xs'
+                    : 'text-ink-400 hover:text-white hover:bg-white/5 border border-transparent'
+                )}
+              >
+                <Bike className="w-3.5 h-3.5" />
+                <span>Bike</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onSelectTravelVehicle?.('foot')}
+                className={cn(
+                  'py-1.5 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5',
+                  travelVehicle === 'foot'
+                    ? 'bg-sky-500/25 text-sky-300 border border-sky-400/40 shadow-xs'
+                    : 'text-ink-400 hover:text-white hover:bg-white/5 border border-transparent'
+                )}
+              >
+                <Footprints className="w-3.5 h-3.5" />
+                <span>Walk</span>
+              </button>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-purple-200/70 bg-gradient-to-r from-[#F6F1FF] to-[#EDFAF4] px-3.5 py-3 text-xs">
-            <div className="font-bold text-ink-900">
-              {simulationMode === 'road'
-                ? 'Google Maps · Driving'
-                : 'PathScope Graph · A* Search'}
-            </div>
-            <p className="mt-1 leading-relaxed text-ink-600">
-              Find Route always draws Google&apos;s snapped driving route.
-              {simulationMode === 'road'
-                ? ' Road mode progressively reveals that same route geometry.'
-                : ' Graph mode animates A* exploration across straight weighted edges.'}
-              Google optimizes stop order for road routes; graph mode follows the
-              selected stop order.
-            </p>
-            <div className="mt-2 flex items-center gap-3 text-[10px] font-semibold text-ink-600">
-              <span className="inline-flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-cyan-400" />
-                Simulation
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <span className="h-1 w-3 rounded-full bg-[#39FF14]" />
-                Final route
-              </span>
-            </div>
-          </div>
-
-          {/* Independent route calculation and route-geometry simulation */}
-          <div className="space-y-2 pt-1">
-            <fieldset className="rounded-xl border border-ink-100 bg-white/80 p-2.5">
-              <legend className="px-1 text-[11px] font-bold text-ink-700">
-                Simulation mode
-              </legend>
-              <div className="grid grid-cols-2 gap-2">
-                <label
-                  className={`cursor-pointer rounded-lg border p-2 transition ${
-                    simulationMode === 'road'
-                      ? 'border-cyan-300 bg-cyan-50'
-                      : 'border-ink-100 bg-white hover:bg-ink-50'
-                  }`}
-                >
-                  <span className="flex items-center gap-1.5 text-[11px] font-bold text-ink-800">
-                    <input
-                      type="radio"
-                      name="simulation-mode"
-                      value="road"
-                      checked={simulationMode === 'road'}
-                      onChange={() => setSimulationMode('road')}
-                      disabled={isBusy}
-                      className="accent-cyan-500"
-                    />
-                    Actual Road Network
-                  </span>
-                  <span className="mt-1 block pl-5 text-[10px] leading-relaxed text-ink-500">
-                    Reveal Google&apos;s snapped road geometry.
-                  </span>
-                </label>
-                <label
-                  className={`cursor-pointer rounded-lg border p-2 transition ${
-                    simulationMode === 'graph'
-                      ? 'border-cyan-300 bg-cyan-50'
-                      : 'border-ink-100 bg-white hover:bg-ink-50'
-                  }`}
-                >
-                  <span className="flex items-center gap-1.5 text-[11px] font-bold text-ink-800">
-                    <input
-                      type="radio"
-                      name="simulation-mode"
-                      value="graph"
-                      checked={simulationMode === 'graph'}
-                      onChange={() => setSimulationMode('graph')}
-                      disabled={isBusy}
-                      className="accent-cyan-500"
-                    />
-                    Direct Graph / Straight Edges
-                  </span>
-                  <span className="mt-1 block pl-5 text-[10px] leading-relaxed text-ink-500">
-                    Animate A* over weighted graph edges.
-                  </span>
-                </label>
-              </div>
-            </fieldset>
-            <Button
-              variant="subtle"
-              size="sm"
-              className="w-full font-bold"
-              onClick={onOpenAlgorithmTable}
-              leftIcon={<GitCompare className="h-3.5 w-3.5 text-purple-800" />}
-            >
-              <span>Compare Algorithms</span>
-            </Button>
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="primary"
-                size="md"
-                className="w-full font-bold shadow-soft"
-                onClick={onFindRoute}
-                disabled={!startNode || !destNode || isBusy}
-                isLoading={isLoading && simulationStatus !== 'preparing'}
-                leftIcon={<Route className="w-3.5 h-3.5 text-purple-950" />}
-              >
-                <span>Find Route</span>
-              </Button>
-              <Button
-                variant="lavender"
-                size="md"
-                className="w-full font-bold"
-                onClick={onStartSimulation}
-                disabled={
-                  !startNode ||
-                  !destNode ||
-                  isBusy && simulationStatus !== 'paused'
-                }
-                isLoading={simulationStatus === 'preparing'}
-                leftIcon={<Play className="w-3.5 h-3.5" />}
-              >
-                <span>
-                  {simulationStatus === 'paused'
-                    ? 'Resume Simulation'
-                    : simulationStatus === 'preparing'
-                      ? 'Finding Route...'
-                      : 'Simulate Algorithm'}
+          {/* Roadblock / Incident Simulator Section */}
+          <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-3 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm">🚧</span>
+                <span className="text-xs font-bold text-white tracking-wide">
+                  Roadblock Simulator
                 </span>
-              </Button>
-            </div>
-            <Button
-              variant="glass"
-              size="sm"
-              className="w-full font-bold"
-              onClick={onPauseSimulation}
-              disabled={simulationStatus !== 'running'}
-              leftIcon={<Pause className="w-3.5 h-3.5" />}
-            >
-              <span>Pause Simulation</span>
-            </Button>
-
-            <div className="rounded-xl border border-ink-100 bg-white/80 p-2.5 space-y-2">
-              <div>
-                <div className="mb-1 flex items-center justify-between">
-                  <label
-                    htmlFor="simulation-speed"
-                    className="text-[11px] font-semibold text-ink-700"
-                  >
-                    Simulation speed
-                  </label>
-                  <span className="font-mono text-[10px] text-ink-500">
-                    {simulationDelay} ms / step
+                {blockedNodes.length > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 animate-pulse">
+                    {blockedNodes.length} Active
                   </span>
-                </div>
-                <input
-                  id="simulation-speed"
-                  type="range"
-                  min="25"
-                  max="500"
-                  step="25"
-                  value={simulationDelay}
-                  onChange={(event) => setSimulationDelay(Number(event.target.value))}
-                  className="w-full accent-cyan-500"
-                />
+                )}
               </div>
-              {isBusy && (
-                <div className="flex items-center justify-between text-[10px] text-ink-500">
-                  <span className="font-semibold">
-                    {simulationStatus === 'preparing'
-                      ? simulationMode === 'graph'
-                        ? 'Computing A* graph trace'
-                        : 'Requesting Google driving route'
-                      : simulationStatus === 'running'
-                        ? simulationMode === 'graph'
-                          ? 'Exploring graph edges'
-                          : 'Simulating along snapped road'
-                        : simulationStatus === 'paused'
-                          ? 'Simulation paused'
-                          : simulationMode === 'graph'
-                            ? 'Highlighting final graph path'
-                            : 'Highlighting final road route'}
-                  </span>
-                  {simulationTotalSteps > 0 && (
-                    <span className="font-mono">
-                      {Math.min(simulationStep + 1, simulationTotalSteps)} / {simulationTotalSteps}
-                    </span>
-                  )}
-                </div>
+              {blockedNodes.length > 0 && onClearBlockedNodes && (
+                <button
+                  type="button"
+                  onClick={onClearBlockedNodes}
+                  className="text-[10px] font-bold text-rose-400 hover:text-rose-300 transition cursor-pointer"
+                >
+                  Clear All
+                </button>
               )}
             </div>
+
+            <p className="text-[10.5px] text-neutral-400 leading-relaxed">
+              Simulate highway closures or landslides. Dijkstra dynamically detours around blocked nodes.
+            </p>
+
+            {/* Quick Demo Preset Pills */}
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => onToggleBlockNode?.('JAI')}
+                className={cn(
+                  'px-2 py-1 rounded-lg text-[10px] font-bold border transition cursor-pointer flex items-center gap-1',
+                  blockedNodes.includes('JAI')
+                    ? 'bg-rose-500/25 border-rose-500/50 text-rose-300 shadow-sm'
+                    : 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10'
+                )}
+                title="Block Jaipur junction on NH48 corridor"
+              >
+                <span>{blockedNodes.includes('JAI') ? '✕' : '🚧'}</span>
+                <span>Jaipur (NH48)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onToggleBlockNode?.('AMB')}
+                className={cn(
+                  'px-2 py-1 rounded-lg text-[10px] font-bold border transition cursor-pointer flex items-center gap-1',
+                  blockedNodes.includes('AMB')
+                    ? 'bg-rose-500/25 border-rose-500/50 text-rose-300 shadow-sm'
+                    : 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10'
+                )}
+                title="Block Ambala junction on NH44 corridor"
+              >
+                <span>{blockedNodes.includes('AMB') ? '✕' : '🚧'}</span>
+                <span>Ambala (NH44)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onToggleBlockNode?.('PNE')}
+                className={cn(
+                  'px-2 py-1 rounded-lg text-[10px] font-bold border transition cursor-pointer flex items-center gap-1',
+                  blockedNodes.includes('PNE')
+                    ? 'bg-rose-500/25 border-rose-500/50 text-rose-300 shadow-sm'
+                    : 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10'
+                )}
+                title="Block Pune junction"
+              >
+                <span>{blockedNodes.includes('PNE') ? '✕' : '🚧'}</span>
+                <span>Pune</span>
+              </button>
+            </div>
+
+            {/* Custom City Selector */}
+            {onToggleBlockNode && (
+              <div className="relative">
+                <select
+                  value=""
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      onToggleBlockNode(e.target.value);
+                    }
+                  }}
+                  className="w-full text-[11px] font-medium bg-white/5 border border-white/10 rounded-xl px-2.5 py-1.5 text-neutral-300 focus:outline-none focus:border-amber-500/50 cursor-pointer"
+                >
+                  <option value="" disabled>
+                    + Block any specific city / node...
+                  </option>
+                  {nodes
+                    .filter((n) => !blockedNodes.includes(n.id))
+                    .map((n) => (
+                      <option key={n.id} value={n.id} className="bg-neutral-900 text-white">
+                        {n.name} ({n.region})
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
+
+            {/* Active Blocked Nodes List */}
+            {blockedNodes.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                {blockedNodes.map((bId) => {
+                  const node = nodes.find((n) => n.id === bId);
+                  return (
+                    <span
+                      key={bId}
+                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 shadow-xs"
+                    >
+                      <span>🚧 {node ? node.name : bId}</span>
+                      <button
+                        type="button"
+                        onClick={() => onToggleBlockNode?.(bId)}
+                        className="hover:text-white font-bold ml-0.5 cursor-pointer leading-none"
+                        title="Remove roadblock"
+                      >
+                        ✕
+                      </button>
+                    </span>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {/* Route Summary Card or Illustrated Empty State */}
+          {/* Primary Action Button */}
+          <div className="space-y-2 pt-1">
+            <button
+              type="button"
+              onClick={onFindRoute}
+              disabled={!startNode || !destNode || isBusy}
+              className={cn(
+                'w-full py-2.5 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg select-none',
+                !startNode || !destNode || isBusy
+                  ? 'bg-white/5 text-ink-500 border border-white/5 cursor-not-allowed opacity-60'
+                  : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-emerald-500/20 active:scale-[0.99]'
+              )}
+            >
+              <Route className="w-4 h-4" />
+              <span>{isLoading ? 'Computing Route...' : 'Find Route'}</span>
+            </button>
+
+            {/* Secondary Actions: Simulate */}
+            <button
+              type="button"
+              onClick={onStartSimulation}
+              disabled={!startNode || !destNode || (isBusy && simulationStatus !== 'paused')}
+              className={cn(
+                'w-full py-2 px-3 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-1.5 cursor-pointer',
+                simulationStatus === 'running'
+                  ? 'bg-amber-500/20 border-amber-400/30 text-amber-300'
+                  : 'bg-white/5 hover:bg-white/10 border-white/10 text-ink-200 hover:text-white'
+              )}
+            >
+              <Play className="w-3.5 h-3.5 text-emerald-400" />
+              <span>
+                {simulationStatus === 'paused'
+                  ? 'Resume Simulation'
+                  : simulationStatus === 'running'
+                    ? 'Simulating...'
+                    : 'Simulate Route'}
+              </span>
+            </button>
+          </div>
+
+          {/* Simulation Active Controls Drawer */}
+          {isSimulating && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-white/[0.04] border border-white/10 rounded-2xl p-2.5 space-y-2 text-xs"
+            >
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-[11px] font-bold text-white">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Simulation Progress
+                </span>
+                <span className="text-[10px] font-mono text-ink-400 font-bold">
+                  {Math.min(simulationStep + 1, simulationTotalSteps)} / {simulationTotalSteps}
+                </span>
+              </div>
+
+              {/* Progress Slider / Speed */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-[10px] text-ink-400">
+                  <span>Speed</span>
+                  <span className="font-mono text-white font-bold">{simulationDelay} ms/step</span>
+                </div>
+                <input
+                  type="range"
+                  min="25"
+                  max="400"
+                  step="25"
+                  value={simulationDelay}
+                  onChange={(e) => setSimulationDelay(Number(e.target.value))}
+                  className="w-full accent-emerald-500 cursor-pointer h-1.5 bg-white/10 rounded-lg appearance-none"
+                />
+              </div>
+
+              {/* Pause / Resume button */}
+              <button
+                type="button"
+                onClick={simulationStatus === 'running' ? onPauseSimulation : onStartSimulation}
+                className="w-full py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer"
+              >
+                {simulationStatus === 'running' ? (
+                  <>
+                    <Pause className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Pause Simulation</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Resume Simulation</span>
+                  </>
+                )}
+              </button>
+            </motion.div>
+          )}
+
+          {/* Route Summary Card or Empty State */}
           {routeResult && routeResult.found ? (
             <motion.div
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              className="p-3.5 rounded-2xl bg-gradient-to-br from-[#F6F1FF]/95 to-[#EDFAF4]/90 border border-purple-200/70 shadow-soft space-y-3"
+              className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 shadow-soft space-y-3"
             >
-              <div className="flex items-center justify-between border-b border-purple-100 pb-2">
-                <span className="text-xs font-bold text-ink-900 flex items-center gap-1.5">
-                  <Route className="w-3.5 h-3.5 text-purple-700" />
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <Route className="w-3.5 h-3.5 text-emerald-400" />
                   Route Summary
                 </span>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/90 text-purple-900 border border-purple-200 shadow-xs">
-                  {routeResult.provider ?? 'GOOGLE MAPS'} ·{' '}
-                  {routeResult.provider === 'PathScope Graph'
-                    ? routeResult.mode?.toUpperCase()
-                    : 'DRIVING'}
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  {routeResult.provider ?? 'GOOGLE MAPS'}
                 </span>
               </div>
 
-              {/* KPI stat tiles */}
-              <div className="grid grid-cols-2 gap-2 text-center">
-                <KpiTile
-                  title="Distance"
-                  value={routeResult.distanceKm ?? 0}
-                  unit="km"
-                  color="mint"
-                  className="p-2.5 rounded-xl"
-                />
-                <KpiTile
-                  title="Est. Time"
-                  value={Math.round(routeResult.timeMin ?? 0)}
-                  unit="min"
-                  color="peach"
-                  className="p-2.5 rounded-xl"
-                />
-              </div>
+              {(() => {
+                const drivingMinutes = routeResult.timeMin ?? 0;
+                const distKm = routeResult.distanceKm ?? 0;
+                const carTime = formatDuration(drivingMinutes);
+                const bikeMinutes =
+                  distKm > 50
+                    ? (distKm / 48) * 60
+                    : drivingMinutes > 0
+                      ? drivingMinutes * 1.08
+                      : (distKm / 35) * 60;
+                const bikeTime = formatDuration(bikeMinutes);
+                const footMinutes = (distKm / 4.8) * 60;
+                const footTime = formatDuration(footMinutes, true);
 
-              {/* Path Node Breadcrumbs */}
+                return (
+                  <>
+                    <div className="grid grid-cols-2 gap-2 text-center">
+                      <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                        <div className="text-[10px] uppercase font-bold text-ink-400">Distance</div>
+                        <div className="text-base font-extrabold text-white font-mono mt-0.5">
+                          {distKm.toFixed(1)} <span className="text-xs text-ink-400">km</span>
+                        </div>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                        <div className="text-[10px] uppercase font-bold text-ink-400">Est. Time</div>
+                        <div className="text-base font-extrabold text-emerald-400 font-mono mt-0.5">
+                          {carTime.value} <span className="text-xs text-ink-400">{carTime.unit}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Multi-modal Estimates */}
+                    <div className="grid grid-cols-3 gap-1.5 text-center pt-1">
+                      <button
+                        type="button"
+                        onClick={() => onSelectTravelVehicle?.('car')}
+                        className={cn(
+                          'p-2 rounded-xl border text-center transition cursor-pointer',
+                          travelVehicle === 'car'
+                            ? 'bg-blue-500/20 border-blue-400 text-blue-200'
+                            : 'bg-white/5 border-white/10 text-ink-300 hover:bg-white/10'
+                        )}
+                      >
+                        <Car className="w-3 h-3 mx-auto mb-1 text-blue-400" />
+                        <div className="text-[11px] font-bold font-mono">{carTime.full}</div>
+                        <div className="text-[9px] text-ink-400">Car</div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => onSelectTravelVehicle?.('bike')}
+                        className={cn(
+                          'p-2 rounded-xl border text-center transition cursor-pointer',
+                          travelVehicle === 'bike'
+                            ? 'bg-rose-500/20 border-rose-400 text-rose-200'
+                            : 'bg-white/5 border-white/10 text-ink-300 hover:bg-white/10'
+                        )}
+                      >
+                        <Bike className="w-3 h-3 mx-auto mb-1 text-rose-400" />
+                        <div className="text-[11px] font-bold font-mono">{bikeTime.full}</div>
+                        <div className="text-[9px] text-ink-400">Bike</div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => onSelectTravelVehicle?.('foot')}
+                        className={cn(
+                          'p-2 rounded-xl border text-center transition cursor-pointer',
+                          travelVehicle === 'foot'
+                            ? 'bg-sky-500/20 border-sky-400 text-sky-200'
+                            : 'bg-white/5 border-white/10 text-ink-300 hover:bg-white/10'
+                        )}
+                      >
+                        <Footprints className="w-3 h-3 mx-auto mb-1 text-sky-400" />
+                        <div className="text-[11px] font-bold font-mono">{footTime.full}</div>
+                        <div className="text-[9px] text-ink-400">Walk</div>
+                      </button>
+                    </div>
+                  </>
+                );
+              })()}
+
+              {/* Stop Sequence */}
               {routeResult.path && routeResult.path.length > 0 && (
-                <div className="pt-1">
-                  <div className="text-[10px] text-ink-500 mb-1.5 font-bold uppercase tracking-wider">
-                    {routeResult.provider === 'PathScope Graph'
-                      ? 'Graph path:'
-                      : 'Driving route stops:'}
+                <div className="pt-2 border-t border-white/10">
+                  <div className="text-[10px] text-ink-400 font-bold uppercase tracking-wider mb-1.5">
+                    Waypoints ({routeResult.path.length} points)
                   </div>
-                  <div className="text-xs text-ink-800 font-mono flex flex-wrap gap-1 max-h-24 overflow-y-auto p-1.5 bg-white/80 rounded-xl border border-purple-100 shadow-inner">
+                  <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto p-1.5 bg-black/20 rounded-xl border border-white/5">
                     {routeResult.path.map((nodeId, idx) => {
                       const node = nodes.find((n) => n.id === nodeId);
                       const isLast = idx === (routeResult.path?.length ?? 0) - 1;
                       return (
-                        <span key={nodeId} className="inline-flex items-center">
-                          <span className="px-2 py-0.5 rounded-lg bg-ink-50 text-ink-800 text-[11px] font-semibold border border-ink-100">
+                        <span key={nodeId} className="inline-flex items-center text-[10px]">
+                          <span className="px-1.5 py-0.5 rounded bg-white/10 text-ink-200 font-medium">
                             {node ? node.name : nodeId}
                           </span>
-                          {!isLast && (
-                            <span className="text-purple-400 mx-1">→</span>
-                          )}
+                          {!isLast && <span className="text-emerald-400 mx-1">→</span>}
                         </span>
                       );
                     })}
@@ -568,30 +837,22 @@ export default function ControlPanel({
                 </div>
               )}
             </motion.div>
-          ) : (
-            routeError ? (
-              <div
-                role="alert"
-                className="flex gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-900"
-              >
-                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" />
-                <div>
-                  <div className="text-sm font-bold">Driving route unavailable</div>
-                  <p className="mt-1 text-xs leading-relaxed">{routeError}</p>
-                </div>
+          ) : routeError ? (
+            <div
+              role="alert"
+              className="flex gap-2.5 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-3 text-rose-200 text-xs"
+            >
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
+              <div>
+                <div className="font-bold">Route unavailable</div>
+                <p className="mt-0.5 text-[11px] leading-relaxed text-rose-300/90">{routeError}</p>
               </div>
-            ) : (
-              <EmptyState
-                icon={<Compass className="w-6 h-6 text-purple-900" />}
-                title="Plan Your Corridor Journey"
-                description="Choose a start, destination, and optional stops to get a Google Maps driving route."
-                palette="lavender"
-                className="p-5"
-              />
-            )
-          )}
+            </div>
+          ) : null}
         </div>
       </div>
     </aside>
   );
 }
+
+export default React.memo(ControlPanel);

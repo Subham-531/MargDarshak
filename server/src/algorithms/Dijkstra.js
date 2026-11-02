@@ -21,8 +21,13 @@ export function dijkstra(graph, startId, targetId, options = {}) {
     avoidHighways = false,
     highwayAvoidMode = 'penalty',
     trafficMultipliers = {},
+    blockedNodes = [],
+    blockedEdges = [],
     includeTrace = true
   } = options;
+
+  const blockedNodesSet = new Set(Array.isArray(blockedNodes) ? blockedNodes : []);
+  const blockedEdgesSet = new Set(Array.isArray(blockedEdges) ? blockedEdges : []);
 
   if (!graph.hasNode(startId)) {
     throw new Error(`Start node '${startId}' does not exist in graph.`);
@@ -140,6 +145,48 @@ export function dijkstra(graph, startId, targetId, options = {}) {
       const neighborNode = graph.getNode(neighborId);
 
       if (visited.has(neighborId)) {
+        continue;
+      }
+
+      // Check if neighbor node is blocked by an active Roadblock / Incident
+      if (blockedNodesSet.has(neighborId)) {
+        if (includeTrace) {
+          stepCount++;
+          trace.push({
+            step: stepCount,
+            type: 'relax',
+            fromNode: currentId,
+            toNode: neighborId,
+            edgeId: neighbor.edgeId,
+            edgeWeight: Infinity,
+            improved: false,
+            explanation: `Node '${neighborNode.name}' (${neighborId}) is closed due to an active Roadblock/Incident. Impassable. Skipped.`,
+            queue: pq.getSnapshot(),
+            distances: snapshotDistances(),
+            visited: Array.from(visited)
+          });
+        }
+        continue;
+      }
+
+      // Check if specific edge is blocked
+      if (blockedEdgesSet.has(neighbor.edgeId)) {
+        if (includeTrace) {
+          stepCount++;
+          trace.push({
+            step: stepCount,
+            type: 'relax',
+            fromNode: currentId,
+            toNode: neighborId,
+            edgeId: neighbor.edgeId,
+            edgeWeight: Infinity,
+            improved: false,
+            explanation: `Highway corridor '${neighbor.edgeId}' is blocked. Impassable. Skipped.`,
+            queue: pq.getSnapshot(),
+            distances: snapshotDistances(),
+            visited: Array.from(visited)
+          });
+        }
         continue;
       }
 

@@ -1,7 +1,7 @@
 {
-  "name": "pathscope-server",
+  "name": "margdarshak-server",
   "version": "1.0.0",
-  "description": "PathScope Chandigarh & Himachal Route Planner Backend API",
+  "description": "MargDarshak Route Planner Backend API",
   "main": "src/server.js",
   "type": "module",
   "scripts": {

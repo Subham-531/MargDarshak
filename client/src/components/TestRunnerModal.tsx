@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Button, SkeletonCard } from './ui';
 import { springSoft, scaleIn } from '../lib/motion';
+import { apiUrl } from '../lib/api';
 
 export interface TestCaseResult {
   id: string;
@@ -42,7 +43,7 @@ export default function TestRunnerModal({
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/tests/run');
+      const res = await fetch(apiUrl('/api/tests/run'));
       const json = await res.json();
       if (json.success) {
         setTestData(json);
@@ -84,7 +85,7 @@ export default function TestRunnerModal({
               </div>
               <div>
                 <h2 className="text-sm sm:text-base font-extrabold text-ink-900">
-                  PathScope Automated Test Suite & Benchmarks
+                  MargDarshak Automated Test Suite & Benchmarks
                 </h2>
                 <p className="text-[11px] text-ink-500 font-semibold mt-0.5">
                   PRD Section 12 Canonical Unit Tests (T1–T7) & Real Corridors (R1–R5)

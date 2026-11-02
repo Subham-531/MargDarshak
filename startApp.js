@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 console.log("===================================================================");
-console.log(" 🚀 PathScope — Chandigarh & Himachal Route Planner Launching...  ");
+console.log(" 🚀 PathScope — India National Route Planner Launching...          ");
 console.log("===================================================================\n");
 
 const isWin = process.platform === 'win32';
@@ -16,7 +16,7 @@ const npmCmd = isWin ? 'npm.cmd' : 'npm';
 const serverDir = path.join(__dirname, 'server');
 const serverProc = spawn('node', ['src/server.js'], {
   cwd: serverDir,
-  shell: true,
+  shell: isWin,
   stdio: 'pipe'
 });
 
@@ -28,12 +28,14 @@ serverProc.stderr.on('data', (data) => {
   process.stderr.write(`\x1b[31m[API Error]\x1b[0m ${data.toString()}`);
 });
 
-// 2. Launch Client Vite Dev Server
+// 2. Launch Client Vite Dev Server (invoke vite.js directly to avoid broken Windows .bin shims)
 const clientDir = path.join(__dirname, 'client');
-const clientProc = spawn(npmCmd, ['run', 'dev'], {
+const viteScript = path.join(clientDir, 'node_modules', 'vite', 'bin', 'vite.js');
+const clientProc = spawn('node', [viteScript], {
   cwd: clientDir,
-  shell: true,
-  stdio: 'pipe'
+  shell: false,
+  stdio: 'pipe',
+  env: { ...process.env }
 });
 
 clientProc.stdout.on('data', (data) => {

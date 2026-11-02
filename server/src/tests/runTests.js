@@ -1,7 +1,7 @@
 import { runAllTests } from './testSuite.js';
 
 console.log("=================================================");
-console.log(" PathScope DSA Verification & Acceptance Tests   ");
+console.log(" MargDarshak DSA Verification & Acceptance Tests   ");
 console.log("=================================================\n");
 
 const { allPassed, passedCount, totalCount, results } = runAllTests();

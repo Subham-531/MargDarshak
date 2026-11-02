@@ -8,7 +8,7 @@ import { computeFixedOrderRoute, computeOptimalOrderRoute } from './algorithms/M
 import { runAllTests } from './tests/testSuite.js';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
@@ -17,9 +17,9 @@ app.use(express.json());
 let graph;
 try {
   graph = loadGraph();
-  console.log(`[PathScope Server] Graph initialized successfully with ${graph.nodes.size} nodes and ${graph.edges.size} edges.`);
+  console.log(`[MargDarshak Server] Graph initialized successfully with ${graph.nodes.size} nodes and ${graph.edges.size} edges.`);
 } catch (err) {
-  console.error(`[PathScope Server] Critical: Failed to load graph: ${err.message}`);
+  console.error(`[MargDarshak Server] Critical: Failed to load graph: ${err.message}`);
   process.exit(1);
 }
 
@@ -83,7 +83,7 @@ app.get('/api/nodes/nearest', (req, res) => {
     return res.status(404).json({ success: false, error: "No nodes available in the network." });
   }
 
-  const COVERAGE_THRESHOLD_KM = 15.0;
+  const COVERAGE_THRESHOLD_KM = 150.0;
   const outOfCoverage = nearest.distanceKm > COVERAGE_THRESHOLD_KM;
 
   res.json({
@@ -92,7 +92,7 @@ app.get('/api/nodes/nearest', (req, res) => {
     distanceKm: nearest.distanceKm,
     outOfCoverage,
     message: outOfCoverage
-      ? `Your location is ${nearest.distanceKm} km away, which is outside the PathScope coverage zone (max ${COVERAGE_THRESHOLD_KM} km). Snapped to closest gateway: ${nearest.node.name}.`
+      ? `Your location is ${nearest.distanceKm} km away, which is outside the MargDarshak coverage zone (max ${COVERAGE_THRESHOLD_KM} km). Snapped to closest city: ${nearest.node.name}.`
       : `Snapped to closest node: ${nearest.node.name} (${nearest.distanceKm} km away).`
   });
 });
@@ -106,11 +106,13 @@ app.post('/api/route', (req, res) => {
     const {
       from,
       to,
-      algorithm = 'astar',
+      algorithm = 'dijkstra',
       mode = 'distance',
       avoidHighways = false,
       highwayAvoidMode = 'penalty',
       trafficMultipliers = {},
+      blockedNodes = [],
+      blockedEdges = [],
       includeTrace = true
     } = req.body;
 
@@ -124,6 +126,8 @@ app.post('/api/route', (req, res) => {
       avoidHighways,
       highwayAvoidMode,
       trafficMultipliers,
+      blockedNodes,
+      blockedEdges,
       includeTrace
     });
 
@@ -277,6 +281,6 @@ app.get('/api/tests/run', (req, res) => {
 
 // Start Express server
 app.listen(PORT, () => {
-  console.log(`[PathScope API] Server running on http://localhost:${PORT}`);
+  console.log(`[MargDarshak API] Server running on http://localhost:${PORT}`);
 });
 

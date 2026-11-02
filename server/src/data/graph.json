@@ -1,142 +1,3029 @@
 {
   "metadata": {
-    "title": "Chandigarh & Himachal Pradesh Road Network Graph",
-    "version": "1.0.0",
-    "targetRegion": "Chandigarh, Tricity & Himachal Corridors",
-    "author": "Manas Gupta, Chandigarh University",
-    "nodeCount": 48
+    "title": "India National Road Network Graph",
+    "version": "2.0.0",
+    "targetRegion": "All India — Major Cities, States, UTs & National Highways",
+    "author": "MargDarshak ADSA Team",
+    "nodeCount": 135,
+    "edgeCount": 207
   },
   "nodes": [
-    { "id": "CHD17", "name": "Sector 17 Plaza", "lat": 30.7398, "lng": 76.7827, "region": "Chandigarh" },
-    { "id": "CHD22", "name": "Sector 22 Market", "lat": 30.7302, "lng": 76.7725, "region": "Chandigarh" },
-    { "id": "CHD35", "name": "Sector 35 Market", "lat": 30.7228, "lng": 76.7645, "region": "Chandigarh" },
-    { "id": "ISBT43", "name": "ISBT Sector 43", "lat": 30.7163, "lng": 76.7455, "region": "Chandigarh" },
-    { "id": "ISBT17", "name": "ISBT Sector 17", "lat": 30.7425, "lng": 76.7845, "region": "Chandigarh" },
-    { "id": "CHD_SUK", "name": "Sukhna Lake", "lat": 30.7421, "lng": 76.8188, "region": "Chandigarh" },
-    { "id": "CHD_RCK", "name": "Rock Garden", "lat": 30.7525, "lng": 76.8066, "region": "Chandigarh" },
-    { "id": "CHD_PGI", "name": "PGIMER Hospital", "lat": 30.7628, "lng": 76.7758, "region": "Chandigarh" },
-    { "id": "CHD_PU", "name": "Panjab University", "lat": 30.7588, "lng": 76.7682, "region": "Chandigarh" },
-    { "id": "CHD_TRB", "name": "Tribune Chowk", "lat": 30.7058, "lng": 76.7972, "region": "Chandigarh" },
-    { "id": "CHD_RLY", "name": "Chandigarh Railway Station", "lat": 30.7022, "lng": 76.8375, "region": "Chandigarh" },
-    { "id": "CHD_ITP", "name": "IT Park Chandigarh", "lat": 30.7262, "lng": 76.8423, "region": "Chandigarh" },
-    { "id": "CHD_AIR", "name": "Shaheed Bhagat Singh Intl Airport", "lat": 30.6735, "lng": 76.7885, "region": "Chandigarh" },
-
-    { "id": "MOH_P7", "name": "Mohali Phase 7", "lat": 30.7103, "lng": 76.7214, "region": "Punjab" },
-    { "id": "MOH_3B2", "name": "Mohali Phase 3B2", "lat": 30.7185, "lng": 76.7298, "region": "Punjab" },
-    { "id": "MOH_PCA", "name": "PCA Stadium Mohali", "lat": 30.6908, "lng": 76.7371, "region": "Punjab" },
-    { "id": "KHR", "name": "Kharar Bus Stand", "lat": 30.7456, "lng": 76.6432, "region": "Punjab" },
-    { "id": "CU_GHR", "name": "Chandigarh University (Gharuan)", "lat": 30.7699, "lng": 76.5758, "region": "Punjab" },
-    { "id": "LDR", "name": "Landran Junction", "lat": 30.6865, "lng": 76.6635, "region": "Punjab" },
-    { "id": "KRL", "name": "Kurali Junction", "lat": 30.8252, "lng": 76.5753, "region": "Punjab" },
-    { "id": "ZRK", "name": "Zirakpur Junction", "lat": 30.6425, "lng": 76.8173, "region": "Punjab" },
-    { "id": "DRB", "name": "Dera Bassi", "lat": 30.5833, "lng": 76.8436, "region": "Punjab" },
-
-    { "id": "PKL_S5", "name": "Panchkula Sector 5", "lat": 30.6942, "lng": 76.8606, "region": "Haryana" },
-    { "id": "PKL_MDC", "name": "Panchkula MDC", "lat": 30.7291, "lng": 76.8521, "region": "Haryana" },
-    { "id": "PNJ", "name": "Pinjore Garden", "lat": 30.7963, "lng": 76.9178, "region": "Haryana" },
-    { "id": "KLK", "name": "Kalka Railway Station", "lat": 30.8354, "lng": 76.9351, "region": "Haryana" },
-
-    { "id": "PRW", "name": "Parwanoo Gateway", "lat": 30.8447, "lng": 76.9632, "region": "Himachal" },
-    { "id": "BDD", "name": "Baddi Industrial Hub", "lat": 30.9578, "lng": 76.7914, "region": "Himachal" },
-    { "id": "JBL", "name": "Jabli (Timber Trail)", "lat": 30.8654, "lng": 76.9942, "region": "Himachal" },
-    { "id": "DHP", "name": "Dharampur Junction", "lat": 30.8992, "lng": 77.0275, "region": "Himachal" },
-    { "id": "KSL", "name": "Kasauli Hill Station", "lat": 30.9013, "lng": 76.9649, "region": "Himachal" },
-    { "id": "KMH", "name": "Kumarhatti", "lat": 30.8924, "lng": 77.0519, "region": "Himachal" },
-    { "id": "SOL", "name": "Solan Mall Road", "lat": 30.9045, "lng": 77.0967, "region": "Himachal" },
-    { "id": "KND", "name": "Kandaghat", "lat": 30.9634, "lng": 77.1082, "region": "Himachal" },
-    { "id": "CHL", "name": "Chail Palace", "lat": 30.9702, "lng": 77.1895, "region": "Himachal" },
-    { "id": "SHG", "name": "Shoghi", "lat": 31.0428, "lng": 77.1264, "region": "Himachal" },
-    { "id": "SML_ISBT", "name": "Shimla ISBT Tutikandi", "lat": 31.0924, "lng": 77.1528, "region": "Himachal" },
-    { "id": "SML", "name": "Shimla (The Mall & Ridge)", "lat": 31.1048, "lng": 77.1734, "region": "Himachal" },
-    { "id": "KFR", "name": "Kufri Nature Park", "lat": 31.0979, "lng": 77.2678, "region": "Himachal" },
-
-    { "id": "RPR", "name": "Rupnagar (Ropar)", "lat": 30.9664, "lng": 76.5331, "region": "Punjab" },
-    { "id": "KRT", "name": "Kiratpur Sahib", "lat": 31.1820, "lng": 76.5684, "region": "Punjab" },
-    { "id": "ANA", "name": "Anandpur Sahib", "lat": 31.2361, "lng": 76.4988, "region": "Punjab" },
-    { "id": "SWR", "name": "Swarghat", "lat": 31.2368, "lng": 76.7118, "region": "Himachal" },
-    { "id": "BLP", "name": "Bilaspur Lake View", "lat": 31.3414, "lng": 76.7589, "region": "Himachal" },
-    { "id": "SND", "name": "Sundernagar", "lat": 31.5332, "lng": 76.8924, "region": "Himachal" },
-    { "id": "MND", "name": "Mandi Town", "lat": 31.7087, "lng": 76.9320, "region": "Himachal" },
-    { "id": "PND", "name": "Pandoh Dam", "lat": 31.6698, "lng": 77.0583, "region": "Himachal" },
-    { "id": "AUT", "name": "Aut Tunnel Junction", "lat": 31.7397, "lng": 77.2062, "region": "Himachal" },
-    { "id": "BNT", "name": "Bhuntar Airport", "lat": 31.8763, "lng": 77.1541, "region": "Himachal" },
-    { "id": "KLU", "name": "Kullu Valley", "lat": 31.9579, "lng": 77.1095, "region": "Himachal" },
-    { "id": "NGR", "name": "Naggar Castle", "lat": 32.1415, "lng": 77.1691, "region": "Himachal" },
-    { "id": "MNL", "name": "Manali Mall Road", "lat": 32.2432, "lng": 77.1892, "region": "Himachal" },
-    { "id": "SLG", "name": "Solang Valley", "lat": 32.3167, "lng": 77.1575, "region": "Himachal" }
+    {
+      "id": "DEL",
+      "name": "New Delhi",
+      "lat": 28.6139,
+      "lng": 77.209,
+      "region": "Delhi"
+    },
+    {
+      "id": "GGN",
+      "name": "Gurugram",
+      "lat": 28.4595,
+      "lng": 77.0266,
+      "region": "Haryana"
+    },
+    {
+      "id": "NOI",
+      "name": "Noida",
+      "lat": 28.5355,
+      "lng": 77.391,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "FBD",
+      "name": "Faridabad",
+      "lat": 28.4089,
+      "lng": 77.3178,
+      "region": "Haryana"
+    },
+    {
+      "id": "GZB",
+      "name": "Ghaziabad",
+      "lat": 28.6692,
+      "lng": 77.4538,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "PNP",
+      "name": "Panipat",
+      "lat": 29.3909,
+      "lng": 76.9635,
+      "region": "Haryana"
+    },
+    {
+      "id": "KNL",
+      "name": "Karnal",
+      "lat": 29.6857,
+      "lng": 76.9905,
+      "region": "Haryana"
+    },
+    {
+      "id": "AMB",
+      "name": "Ambala",
+      "lat": 30.3782,
+      "lng": 76.7767,
+      "region": "Haryana"
+    },
+    {
+      "id": "CHD",
+      "name": "Chandigarh",
+      "lat": 30.7333,
+      "lng": 76.7794,
+      "region": "Chandigarh"
+    },
+    {
+      "id": "LDH",
+      "name": "Ludhiana",
+      "lat": 30.901,
+      "lng": 75.8573,
+      "region": "Punjab"
+    },
+    {
+      "id": "JAL",
+      "name": "Jalandhar",
+      "lat": 31.326,
+      "lng": 75.5762,
+      "region": "Punjab"
+    },
+    {
+      "id": "AMR",
+      "name": "Amritsar",
+      "lat": 31.634,
+      "lng": 74.8723,
+      "region": "Punjab"
+    },
+    {
+      "id": "PTL",
+      "name": "Patiala",
+      "lat": 30.3398,
+      "lng": 76.3869,
+      "region": "Punjab"
+    },
+    {
+      "id": "BTD",
+      "name": "Bathinda",
+      "lat": 30.211,
+      "lng": 74.9455,
+      "region": "Punjab"
+    },
+    {
+      "id": "SML",
+      "name": "Shimla",
+      "lat": 31.1048,
+      "lng": 77.1734,
+      "region": "Himachal Pradesh"
+    },
+    {
+      "id": "MNL",
+      "name": "Manali",
+      "lat": 32.2432,
+      "lng": 77.1892,
+      "region": "Himachal Pradesh"
+    },
+    {
+      "id": "DHR",
+      "name": "Dharamshala",
+      "lat": 32.219,
+      "lng": 76.3234,
+      "region": "Himachal Pradesh"
+    },
+    {
+      "id": "KLU",
+      "name": "Kullu",
+      "lat": 31.9579,
+      "lng": 77.1095,
+      "region": "Himachal Pradesh"
+    },
+    {
+      "id": "DDN",
+      "name": "Dehradun",
+      "lat": 30.3165,
+      "lng": 78.0322,
+      "region": "Uttarakhand"
+    },
+    {
+      "id": "HRD",
+      "name": "Haridwar",
+      "lat": 29.9457,
+      "lng": 78.1642,
+      "region": "Uttarakhand"
+    },
+    {
+      "id": "RKE",
+      "name": "Rishikesh",
+      "lat": 30.0869,
+      "lng": 78.2676,
+      "region": "Uttarakhand"
+    },
+    {
+      "id": "NNT",
+      "name": "Nainital",
+      "lat": 29.3919,
+      "lng": 79.4542,
+      "region": "Uttarakhand"
+    },
+    {
+      "id": "JMU",
+      "name": "Jammu",
+      "lat": 32.7266,
+      "lng": 74.857,
+      "region": "Jammu & Kashmir"
+    },
+    {
+      "id": "SNG",
+      "name": "Srinagar",
+      "lat": 34.0837,
+      "lng": 74.7973,
+      "region": "Jammu & Kashmir"
+    },
+    {
+      "id": "LEH",
+      "name": "Leh",
+      "lat": 34.1526,
+      "lng": 77.5771,
+      "region": "Ladakh"
+    },
+    {
+      "id": "MRT",
+      "name": "Meerut",
+      "lat": 28.9845,
+      "lng": 77.7064,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "MTR",
+      "name": "Mathura",
+      "lat": 27.4924,
+      "lng": 77.6737,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "AGR",
+      "name": "Agra",
+      "lat": 27.1767,
+      "lng": 78.0081,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "ALH",
+      "name": "Aligarh",
+      "lat": 27.8974,
+      "lng": 78.088,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "BRY",
+      "name": "Bareilly",
+      "lat": 28.367,
+      "lng": 79.4304,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "LKO",
+      "name": "Lucknow",
+      "lat": 26.8467,
+      "lng": 80.9462,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "KNP",
+      "name": "Kanpur",
+      "lat": 26.4499,
+      "lng": 80.3319,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "AYD",
+      "name": "Ayodhya",
+      "lat": 26.7922,
+      "lng": 82.1998,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "PRY",
+      "name": "Prayagraj",
+      "lat": 25.4358,
+      "lng": 81.8463,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "VNS",
+      "name": "Varanasi",
+      "lat": 25.3176,
+      "lng": 82.9739,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "GKP",
+      "name": "Gorakhpur",
+      "lat": 26.7606,
+      "lng": 83.3732,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "JHS",
+      "name": "Jhansi",
+      "lat": 25.4484,
+      "lng": 78.5685,
+      "region": "Uttar Pradesh"
+    },
+    {
+      "id": "GWL",
+      "name": "Gwalior",
+      "lat": 26.2183,
+      "lng": 78.1828,
+      "region": "Madhya Pradesh"
+    },
+    {
+      "id": "BPL",
+      "name": "Bhopal",
+      "lat": 23.2599,
+      "lng": 77.4126,
+      "region": "Madhya Pradesh"
+    },
+    {
+      "id": "IDR",
+      "name": "Indore",
+      "lat": 22.7196,
+      "lng": 75.8577,
+      "region": "Madhya Pradesh"
+    },
+    {
+      "id": "UJJ",
+      "name": "Ujjain",
+      "lat": 23.1765,
+      "lng": 75.7885,
+      "region": "Madhya Pradesh"
+    },
+    {
+      "id": "JBP",
+      "name": "Jabalpur",
+      "lat": 23.1815,
+      "lng": 79.9864,
+      "region": "Madhya Pradesh"
+    },
+    {
+      "id": "SAG",
+      "name": "Sagar",
+      "lat": 23.8388,
+      "lng": 78.7378,
+      "region": "Madhya Pradesh"
+    },
+    {
+      "id": "REW",
+      "name": "Rewa",
+      "lat": 24.5362,
+      "lng": 81.3037,
+      "region": "Madhya Pradesh"
+    },
+    {
+      "id": "RPR",
+      "name": "Raipur",
+      "lat": 21.2514,
+      "lng": 81.6296,
+      "region": "Chhattisgarh"
+    },
+    {
+      "id": "BSP",
+      "name": "Bilaspur",
+      "lat": 22.0797,
+      "lng": 82.1409,
+      "region": "Chhattisgarh"
+    },
+    {
+      "id": "PAT",
+      "name": "Patna",
+      "lat": 25.5941,
+      "lng": 85.1376,
+      "region": "Bihar"
+    },
+    {
+      "id": "GYA",
+      "name": "Gaya",
+      "lat": 24.7914,
+      "lng": 85.0002,
+      "region": "Bihar"
+    },
+    {
+      "id": "BGP",
+      "name": "Bhagalpur",
+      "lat": 25.2425,
+      "lng": 86.9842,
+      "region": "Bihar"
+    },
+    {
+      "id": "MZP",
+      "name": "Muzaffarpur",
+      "lat": 26.1209,
+      "lng": 85.3647,
+      "region": "Bihar"
+    },
+    {
+      "id": "RAN",
+      "name": "Ranchi",
+      "lat": 23.3441,
+      "lng": 85.3096,
+      "region": "Jharkhand"
+    },
+    {
+      "id": "JSR",
+      "name": "Jamshedpur",
+      "lat": 22.8046,
+      "lng": 86.2029,
+      "region": "Jharkhand"
+    },
+    {
+      "id": "DHN",
+      "name": "Dhanbad",
+      "lat": 23.7957,
+      "lng": 86.4304,
+      "region": "Jharkhand"
+    },
+    {
+      "id": "JAI",
+      "name": "Jaipur",
+      "lat": 26.9124,
+      "lng": 75.7873,
+      "region": "Rajasthan"
+    },
+    {
+      "id": "AJM",
+      "name": "Ajmer",
+      "lat": 26.4499,
+      "lng": 74.6399,
+      "region": "Rajasthan"
+    },
+    {
+      "id": "JDH",
+      "name": "Jodhpur",
+      "lat": 26.2389,
+      "lng": 73.0243,
+      "region": "Rajasthan"
+    },
+    {
+      "id": "UDR",
+      "name": "Udaipur",
+      "lat": 24.5854,
+      "lng": 73.7125,
+      "region": "Rajasthan"
+    },
+    {
+      "id": "KTA",
+      "name": "Kota",
+      "lat": 25.2138,
+      "lng": 75.8648,
+      "region": "Rajasthan"
+    },
+    {
+      "id": "BKN",
+      "name": "Bikaner",
+      "lat": 28.0229,
+      "lng": 73.3119,
+      "region": "Rajasthan"
+    },
+    {
+      "id": "JSM",
+      "name": "Jaisalmer",
+      "lat": 26.9157,
+      "lng": 70.9083,
+      "region": "Rajasthan"
+    },
+    {
+      "id": "AMD",
+      "name": "Ahmedabad",
+      "lat": 23.0225,
+      "lng": 72.5714,
+      "region": "Gujarat"
+    },
+    {
+      "id": "GND",
+      "name": "Gandhinagar",
+      "lat": 23.2156,
+      "lng": 72.6369,
+      "region": "Gujarat"
+    },
+    {
+      "id": "VAD",
+      "name": "Vadodara",
+      "lat": 22.3072,
+      "lng": 73.1812,
+      "region": "Gujarat"
+    },
+    {
+      "id": "SRT",
+      "name": "Surat",
+      "lat": 21.1702,
+      "lng": 72.8311,
+      "region": "Gujarat"
+    },
+    {
+      "id": "RJK",
+      "name": "Rajkot",
+      "lat": 22.3039,
+      "lng": 70.8022,
+      "region": "Gujarat"
+    },
+    {
+      "id": "BVN",
+      "name": "Bhavnagar",
+      "lat": 21.7645,
+      "lng": 72.1519,
+      "region": "Gujarat"
+    },
+    {
+      "id": "JAM",
+      "name": "Jamnagar",
+      "lat": 22.4707,
+      "lng": 70.0577,
+      "region": "Gujarat"
+    },
+    {
+      "id": "BHJ",
+      "name": "Bhuj",
+      "lat": 23.242,
+      "lng": 69.6669,
+      "region": "Gujarat"
+    },
+    {
+      "id": "MUM",
+      "name": "Mumbai",
+      "lat": 19.076,
+      "lng": 72.8777,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "THN",
+      "name": "Thane",
+      "lat": 19.2183,
+      "lng": 72.9781,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "NMU",
+      "name": "Navi Mumbai",
+      "lat": 19.033,
+      "lng": 73.0297,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "PNE",
+      "name": "Pune",
+      "lat": 18.5204,
+      "lng": 73.8567,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "NSK",
+      "name": "Nashik",
+      "lat": 19.9975,
+      "lng": 73.7898,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "NGP",
+      "name": "Nagpur",
+      "lat": 21.1458,
+      "lng": 79.0882,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "CHB",
+      "name": "Chhatrapati Sambhajinagar",
+      "lat": 19.8762,
+      "lng": 75.3433,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "SOL_MH",
+      "name": "Solapur",
+      "lat": 17.6599,
+      "lng": 75.9064,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "KLP",
+      "name": "Kolhapur",
+      "lat": 16.705,
+      "lng": 74.2433,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "AMV",
+      "name": "Amravati",
+      "lat": 20.9374,
+      "lng": 77.7796,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "NND",
+      "name": "Nanded",
+      "lat": 19.1383,
+      "lng": 77.321,
+      "region": "Maharashtra"
+    },
+    {
+      "id": "GOA",
+      "name": "Panaji",
+      "lat": 15.4909,
+      "lng": 73.8278,
+      "region": "Goa"
+    },
+    {
+      "id": "MRG",
+      "name": "Margao",
+      "lat": 15.2832,
+      "lng": 73.9862,
+      "region": "Goa"
+    },
+    {
+      "id": "BLR",
+      "name": "Bengaluru",
+      "lat": 12.9716,
+      "lng": 77.5946,
+      "region": "Karnataka"
+    },
+    {
+      "id": "MYS",
+      "name": "Mysuru",
+      "lat": 12.2958,
+      "lng": 76.6394,
+      "region": "Karnataka"
+    },
+    {
+      "id": "MNG",
+      "name": "Mangaluru",
+      "lat": 12.9141,
+      "lng": 74.856,
+      "region": "Karnataka"
+    },
+    {
+      "id": "HUB",
+      "name": "Hubballi",
+      "lat": 15.3647,
+      "lng": 75.124,
+      "region": "Karnataka"
+    },
+    {
+      "id": "BLG",
+      "name": "Belagavi",
+      "lat": 15.8497,
+      "lng": 74.4977,
+      "region": "Karnataka"
+    },
+    {
+      "id": "KLM",
+      "name": "Kalaburagi",
+      "lat": 17.3297,
+      "lng": 76.8343,
+      "region": "Karnataka"
+    },
+    {
+      "id": "SHI",
+      "name": "Shivamogga",
+      "lat": 13.9299,
+      "lng": 75.5681,
+      "region": "Karnataka"
+    },
+    {
+      "id": "HYD",
+      "name": "Hyderabad",
+      "lat": 17.385,
+      "lng": 78.4867,
+      "region": "Telangana"
+    },
+    {
+      "id": "WRG",
+      "name": "Warangal",
+      "lat": 17.9689,
+      "lng": 79.5941,
+      "region": "Telangana"
+    },
+    {
+      "id": "NZB",
+      "name": "Nizamabad",
+      "lat": 18.6725,
+      "lng": 78.0941,
+      "region": "Telangana"
+    },
+    {
+      "id": "KRM",
+      "name": "Karimnagar",
+      "lat": 18.4386,
+      "lng": 79.1288,
+      "region": "Telangana"
+    },
+    {
+      "id": "VSP",
+      "name": "Visakhapatnam",
+      "lat": 17.6868,
+      "lng": 83.2185,
+      "region": "Andhra Pradesh"
+    },
+    {
+      "id": "VJA",
+      "name": "Vijayawada",
+      "lat": 16.5062,
+      "lng": 80.648,
+      "region": "Andhra Pradesh"
+    },
+    {
+      "id": "GNT",
+      "name": "Guntur",
+      "lat": 16.3067,
+      "lng": 80.4365,
+      "region": "Andhra Pradesh"
+    },
+    {
+      "id": "TPT",
+      "name": "Tirupati",
+      "lat": 13.6288,
+      "lng": 79.4192,
+      "region": "Andhra Pradesh"
+    },
+    {
+      "id": "KRN",
+      "name": "Kurnool",
+      "lat": 15.8281,
+      "lng": 78.0373,
+      "region": "Andhra Pradesh"
+    },
+    {
+      "id": "ATP",
+      "name": "Anantapur",
+      "lat": 14.6819,
+      "lng": 77.6006,
+      "region": "Andhra Pradesh"
+    },
+    {
+      "id": "CHE",
+      "name": "Chennai",
+      "lat": 13.0827,
+      "lng": 80.2707,
+      "region": "Tamil Nadu"
+    },
+    {
+      "id": "CBE",
+      "name": "Coimbatore",
+      "lat": 11.0168,
+      "lng": 76.9558,
+      "region": "Tamil Nadu"
+    },
+    {
+      "id": "MDU",
+      "name": "Madurai",
+      "lat": 9.9252,
+      "lng": 78.1198,
+      "region": "Tamil Nadu"
+    },
+    {
+      "id": "TRZ",
+      "name": "Tiruchirappalli",
+      "lat": 10.7905,
+      "lng": 78.7047,
+      "region": "Tamil Nadu"
+    },
+    {
+      "id": "SLM",
+      "name": "Salem",
+      "lat": 11.6643,
+      "lng": 78.146,
+      "region": "Tamil Nadu"
+    },
+    {
+      "id": "TVL",
+      "name": "Tirunelveli",
+      "lat": 8.7139,
+      "lng": 77.7567,
+      "region": "Tamil Nadu"
+    },
+    {
+      "id": "KNY",
+      "name": "Kanyakumari",
+      "lat": 8.0883,
+      "lng": 77.5385,
+      "region": "Tamil Nadu"
+    },
+    {
+      "id": "VEL",
+      "name": "Vellore",
+      "lat": 12.9165,
+      "lng": 79.1325,
+      "region": "Tamil Nadu"
+    },
+    {
+      "id": "PDY",
+      "name": "Puducherry",
+      "lat": 11.9416,
+      "lng": 79.8083,
+      "region": "Puducherry"
+    },
+    {
+      "id": "TVM",
+      "name": "Thiruvananthapuram",
+      "lat": 8.5241,
+      "lng": 76.9366,
+      "region": "Kerala"
+    },
+    {
+      "id": "KOC",
+      "name": "Kochi",
+      "lat": 9.9312,
+      "lng": 76.2673,
+      "region": "Kerala"
+    },
+    {
+      "id": "KOZ",
+      "name": "Kozhikode",
+      "lat": 11.2588,
+      "lng": 75.7804,
+      "region": "Kerala"
+    },
+    {
+      "id": "TCR",
+      "name": "Thrissur",
+      "lat": 10.5276,
+      "lng": 76.2144,
+      "region": "Kerala"
+    },
+    {
+      "id": "KNR",
+      "name": "Kannur",
+      "lat": 11.8745,
+      "lng": 75.3704,
+      "region": "Kerala"
+    },
+    {
+      "id": "ALP",
+      "name": "Alappuzha",
+      "lat": 9.4981,
+      "lng": 76.3388,
+      "region": "Kerala"
+    },
+    {
+      "id": "KOL",
+      "name": "Kolkata",
+      "lat": 22.5726,
+      "lng": 88.3639,
+      "region": "West Bengal"
+    },
+    {
+      "id": "HWH",
+      "name": "Howrah",
+      "lat": 22.5958,
+      "lng": 88.2636,
+      "region": "West Bengal"
+    },
+    {
+      "id": "ASL",
+      "name": "Asansol",
+      "lat": 23.6739,
+      "lng": 86.9524,
+      "region": "West Bengal"
+    },
+    {
+      "id": "SLG",
+      "name": "Siliguri",
+      "lat": 26.7271,
+      "lng": 88.3953,
+      "region": "West Bengal"
+    },
+    {
+      "id": "KGP",
+      "name": "Kharagpur",
+      "lat": 22.346,
+      "lng": 87.232,
+      "region": "West Bengal"
+    },
+    {
+      "id": "BBS",
+      "name": "Bhubaneswar",
+      "lat": 20.2961,
+      "lng": 85.8245,
+      "region": "Odisha"
+    },
+    {
+      "id": "CTC",
+      "name": "Cuttack",
+      "lat": 20.4625,
+      "lng": 85.8828,
+      "region": "Odisha"
+    },
+    {
+      "id": "RKL",
+      "name": "Rourkela",
+      "lat": 22.2604,
+      "lng": 84.8536,
+      "region": "Odisha"
+    },
+    {
+      "id": "BMR",
+      "name": "Berhampur",
+      "lat": 19.315,
+      "lng": 84.7941,
+      "region": "Odisha"
+    },
+    {
+      "id": "SBP",
+      "name": "Sambalpur",
+      "lat": 21.4669,
+      "lng": 83.9812,
+      "region": "Odisha"
+    },
+    {
+      "id": "GHY",
+      "name": "Guwahati",
+      "lat": 26.1445,
+      "lng": 91.7362,
+      "region": "Assam"
+    },
+    {
+      "id": "SHL",
+      "name": "Shillong",
+      "lat": 25.5788,
+      "lng": 91.8933,
+      "region": "Meghalaya"
+    },
+    {
+      "id": "TEZ",
+      "name": "Tezpur",
+      "lat": 26.6528,
+      "lng": 92.7926,
+      "region": "Assam"
+    },
+    {
+      "id": "JRH",
+      "name": "Jorhat",
+      "lat": 26.7509,
+      "lng": 94.2037,
+      "region": "Assam"
+    },
+    {
+      "id": "DBR",
+      "name": "Dibrugarh",
+      "lat": 27.4728,
+      "lng": 94.912,
+      "region": "Assam"
+    },
+    {
+      "id": "SIL",
+      "name": "Silchar",
+      "lat": 24.8333,
+      "lng": 92.7789,
+      "region": "Assam"
+    },
+    {
+      "id": "AGT",
+      "name": "Agartala",
+      "lat": 23.8315,
+      "lng": 91.2868,
+      "region": "Tripura"
+    },
+    {
+      "id": "AIZ",
+      "name": "Aizawl",
+      "lat": 23.7307,
+      "lng": 92.7173,
+      "region": "Mizoram"
+    },
+    {
+      "id": "IMP",
+      "name": "Imphal",
+      "lat": 24.817,
+      "lng": 93.9368,
+      "region": "Manipur"
+    },
+    {
+      "id": "KOH",
+      "name": "Kohima",
+      "lat": 25.6751,
+      "lng": 94.1086,
+      "region": "Nagaland"
+    },
+    {
+      "id": "ITN",
+      "name": "Itanagar",
+      "lat": 27.0844,
+      "lng": 93.6053,
+      "region": "Arunachal Pradesh"
+    },
+    {
+      "id": "GTK",
+      "name": "Gangtok",
+      "lat": 27.3389,
+      "lng": 88.6065,
+      "region": "Sikkim"
+    }
   ],
   "edges": [
-    { "id": "e_chd17_pkl", "from": "CHD17", "to": "PKL_S5", "distanceKm": 8.5, "speedKmph": 65, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_chd17_isbt17", "from": "CHD17", "to": "ISBT17", "distanceKm": 1.2, "speedKmph": 40, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_chd17_chd22", "from": "CHD17", "to": "CHD22", "distanceKm": 1.8, "speedKmph": 45, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_chd17_rck", "from": "CHD17", "to": "CHD_RCK", "distanceKm": 3.2, "speedKmph": 45, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_chd17_pgi", "from": "CHD17", "to": "CHD_PGI", "distanceKm": 3.5, "speedKmph": 45, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_chd17_trb", "from": "CHD17", "to": "CHD_TRB", "distanceKm": 4.0, "speedKmph": 55, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    
-    { "id": "e_chd22_chd35", "from": "CHD22", "to": "CHD35", "distanceKm": 1.5, "speedKmph": 40, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_chd35_isbt43", "from": "CHD35", "to": "ISBT43", "distanceKm": 2.2, "speedKmph": 45, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_chd35_moh3b2", "from": "CHD35", "to": "MOH_3B2", "distanceKm": 3.8, "speedKmph": 50, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_isbt43_mohp7", "from": "ISBT43", "to": "MOH_P7", "distanceKm": 2.8, "speedKmph": 50, "roadType": "local", "terrain": "plain", "oneWay": false },
-    
-    { "id": "e_rck_suk", "from": "CHD_RCK", "to": "CHD_SUK", "distanceKm": 1.6, "speedKmph": 40, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_suk_itp", "from": "CHD_SUK", "to": "CHD_ITP", "distanceKm": 3.4, "speedKmph": 50, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_pgi_pu", "from": "CHD_PGI", "to": "CHD_PU", "distanceKm": 1.2, "speedKmph": 35, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_pu_khr", "from": "CHD_PU", "to": "KHR", "distanceKm": 11.5, "speedKmph": 60, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    
-    { "id": "e_trb_rly", "from": "CHD_TRB", "to": "CHD_RLY", "distanceKm": 4.5, "speedKmph": 50, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_trb_air", "from": "CHD_TRB", "to": "CHD_AIR", "distanceKm": 5.2, "speedKmph": 60, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_trb_zrk", "from": "CHD_TRB", "to": "ZRK", "distanceKm": 7.0, "speedKmph": 65, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_trb_pkl", "from": "CHD_TRB", "to": "PKL_S5", "distanceKm": 7.0, "speedKmph": 65, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    
-    { "id": "e_mohp7_moh3b2", "from": "MOH_P7", "to": "MOH_3B2", "distanceKm": 1.6, "speedKmph": 40, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_mohp7_pca", "from": "MOH_P7", "to": "MOH_PCA", "distanceKm": 2.5, "speedKmph": 45, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_pca_air", "from": "MOH_PCA", "to": "CHD_AIR", "distanceKm": 6.0, "speedKmph": 60, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_mohp7_ldr", "from": "MOH_P7", "to": "LDR", "distanceKm": 6.8, "speedKmph": 55, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_ldr_khr", "from": "LDR", "to": "KHR", "distanceKm": 7.5, "speedKmph": 55, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_khr_cu", "from": "KHR", "to": "CU_GHR", "distanceKm": 7.8, "speedKmph": 65, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_cu_krl", "from": "CU_GHR", "to": "KRL", "distanceKm": 6.5, "speedKmph": 60, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_khr_krl", "from": "KHR", "to": "KRL", "distanceKm": 12.0, "speedKmph": 70, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    
-    { "id": "e_zrk_drb", "from": "ZRK", "to": "DRB", "distanceKm": 7.5, "speedKmph": 75, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_zrk_pkl", "from": "ZRK", "to": "PKL_S5", "distanceKm": 6.5, "speedKmph": 60, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_zrk_air", "from": "ZRK", "to": "CHD_AIR", "distanceKm": 5.0, "speedKmph": 60, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_pkl_mdc", "from": "PKL_S5", "to": "PKL_MDC", "distanceKm": 4.2, "speedKmph": 45, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_mdc_itp", "from": "PKL_MDC", "to": "CHD_ITP", "distanceKm": 1.5, "speedKmph": 40, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_pkl_pnj", "from": "PKL_S5", "to": "PNJ", "distanceKm": 14.0, "speedKmph": 80, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_mdc_pnj", "from": "PKL_MDC", "to": "PNJ", "distanceKm": 16.0, "speedKmph": 40, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_pnj_klk", "from": "PNJ", "to": "KLK", "distanceKm": 5.0, "speedKmph": 60, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_pnj_bdd", "from": "PNJ", "to": "BDD", "distanceKm": 20.0, "speedKmph": 60, "roadType": "highway", "terrain": "plain", "oneWay": false },
-
-    { "id": "e_klk_prw", "from": "KLK", "to": "PRW", "distanceKm": 4.0, "speedKmph": 50, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_prw_jbl", "from": "PRW", "to": "JBL", "distanceKm": 7.0, "speedKmph": 45, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_jbl_dhp", "from": "JBL", "to": "DHP", "distanceKm": 11.0, "speedKmph": 45, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_dhp_ksl", "from": "DHP", "to": "KSL", "distanceKm": 10.0, "speedKmph": 30, "roadType": "local", "terrain": "hill", "oneWay": false },
-    { "id": "e_ksl_kmh", "from": "KSL", "to": "KMH", "distanceKm": 12.0, "speedKmph": 30, "roadType": "local", "terrain": "hill", "oneWay": false },
-    { "id": "e_dhp_kmh", "from": "DHP", "to": "KMH", "distanceKm": 4.0, "speedKmph": 50, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_kmh_sol", "from": "KMH", "to": "SOL", "distanceKm": 8.0, "speedKmph": 50, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_sol_knd", "from": "SOL", "to": "KND", "distanceKm": 14.0, "speedKmph": 45, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_knd_chl", "from": "KND", "to": "CHL", "distanceKm": 26.0, "speedKmph": 28, "roadType": "local", "terrain": "hill", "oneWay": false },
-    { "id": "e_chl_kfr", "from": "CHL", "to": "KFR", "distanceKm": 28.0, "speedKmph": 28, "roadType": "local", "terrain": "hill", "oneWay": false },
-    { "id": "e_knd_shg", "from": "KND", "to": "SHG", "distanceKm": 17.0, "speedKmph": 45, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_shg_smlisbt", "from": "SHG", "to": "SML_ISBT", "distanceKm": 10.0, "speedKmph": 45, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_smlisbt_sml", "from": "SML_ISBT", "to": "SML", "distanceKm": 4.0, "speedKmph": 35, "roadType": "local", "terrain": "hill", "oneWay": false },
-    { "id": "e_sml_kfr", "from": "SML", "to": "KFR", "distanceKm": 15.0, "speedKmph": 35, "roadType": "highway", "terrain": "hill", "oneWay": false },
-
-    { "id": "e_krl_rpr", "from": "KRL", "to": "RPR", "distanceKm": 16.0, "speedKmph": 75, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_rpr_krt", "from": "RPR", "to": "KRT", "distanceKm": 28.0, "speedKmph": 80, "roadType": "highway", "terrain": "plain", "oneWay": false },
-    { "id": "e_krt_ana", "from": "KRT", "to": "ANA", "distanceKm": 9.0, "speedKmph": 55, "roadType": "local", "terrain": "plain", "oneWay": false },
-    { "id": "e_krt_swr", "from": "KRT", "to": "SWR", "distanceKm": 20.0, "speedKmph": 50, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_bdd_swr", "from": "BDD", "to": "SWR", "distanceKm": 54.0, "speedKmph": 35, "roadType": "local", "terrain": "hill", "oneWay": false },
-    { "id": "e_swr_blp", "from": "SWR", "to": "BLP", "distanceKm": 38.0, "speedKmph": 55, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_blp_snd", "from": "BLP", "to": "SND", "distanceKm": 45.0, "speedKmph": 60, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_snd_mnd", "from": "SND", "to": "MND", "distanceKm": 25.0, "speedKmph": 55, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_mnd_pnd", "from": "MND", "to": "PND", "distanceKm": 18.0, "speedKmph": 50, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_pnd_aut", "from": "PND", "to": "AUT", "distanceKm": 22.0, "speedKmph": 55, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_aut_bnt", "from": "AUT", "to": "BNT", "distanceKm": 20.0, "speedKmph": 60, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_bnt_klu", "from": "BNT", "to": "KLU", "distanceKm": 12.0, "speedKmph": 50, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_klu_ngr", "from": "KLU", "to": "NGR", "distanceKm": 21.0, "speedKmph": 35, "roadType": "local", "terrain": "hill", "oneWay": false },
-    { "id": "e_ngr_mnl", "from": "NGR", "to": "MNL", "distanceKm": 22.0, "speedKmph": 35, "roadType": "local", "terrain": "hill", "oneWay": false },
-    { "id": "e_klu_mnl", "from": "KLU", "to": "MNL", "distanceKm": 40.0, "speedKmph": 55, "roadType": "highway", "terrain": "hill", "oneWay": false },
-    { "id": "e_mnl_slg", "from": "MNL", "to": "SLG", "distanceKm": 13.0, "speedKmph": 35, "roadType": "local", "terrain": "hill", "oneWay": false }
+    {
+      "id": "e_del_ggn_1",
+      "from": "DEL",
+      "to": "GGN",
+      "distanceKm": 32,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_del_noi_2",
+      "from": "DEL",
+      "to": "NOI",
+      "distanceKm": 20,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_del_fbd_3",
+      "from": "DEL",
+      "to": "FBD",
+      "distanceKm": 28,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_del_gzb_4",
+      "from": "DEL",
+      "to": "GZB",
+      "distanceKm": 25,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_noi_gzb_5",
+      "from": "NOI",
+      "to": "GZB",
+      "distanceKm": 18,
+      "speedKmph": 50,
+      "roadType": "local",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ggn_fbd_6",
+      "from": "GGN",
+      "to": "FBD",
+      "distanceKm": 35,
+      "speedKmph": 60,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_del_pnp_7",
+      "from": "DEL",
+      "to": "PNP",
+      "distanceKm": 88,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pnp_knl_8",
+      "from": "PNP",
+      "to": "KNL",
+      "distanceKm": 35,
+      "speedKmph": 90,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_knl_amb_9",
+      "from": "KNL",
+      "to": "AMB",
+      "distanceKm": 80,
+      "speedKmph": 90,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amb_chd_10",
+      "from": "AMB",
+      "to": "CHD",
+      "distanceKm": 45,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amb_ptl_11",
+      "from": "AMB",
+      "to": "PTL",
+      "distanceKm": 52,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ptl_btd_12",
+      "from": "PTL",
+      "to": "BTD",
+      "distanceKm": 155,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amb_ldh_13",
+      "from": "AMB",
+      "to": "LDH",
+      "distanceKm": 115,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_chd_ldh_14",
+      "from": "CHD",
+      "to": "LDH",
+      "distanceKm": 100,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ldh_jal_15",
+      "from": "LDH",
+      "to": "JAL",
+      "distanceKm": 62,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jal_amr_16",
+      "from": "JAL",
+      "to": "AMR",
+      "distanceKm": 82,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jal_jmu_17",
+      "from": "JAL",
+      "to": "JMU",
+      "distanceKm": 215,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amr_jmu_18",
+      "from": "AMR",
+      "to": "JMU",
+      "distanceKm": 210,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jmu_sng_19",
+      "from": "JMU",
+      "to": "SNG",
+      "distanceKm": 260,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_sng_leh_20",
+      "from": "SNG",
+      "to": "LEH",
+      "distanceKm": 420,
+      "speedKmph": 35,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_mnl_leh_21",
+      "from": "MNL",
+      "to": "LEH",
+      "distanceKm": 430,
+      "speedKmph": 35,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_chd_sml_22",
+      "from": "CHD",
+      "to": "SML",
+      "distanceKm": 112,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_chd_mnl_23",
+      "from": "CHD",
+      "to": "MNL",
+      "distanceKm": 290,
+      "speedKmph": 50,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_sml_klu_24",
+      "from": "SML",
+      "to": "KLU",
+      "distanceKm": 210,
+      "speedKmph": 40,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_klu_mnl_25",
+      "from": "KLU",
+      "to": "MNL",
+      "distanceKm": 40,
+      "speedKmph": 50,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_jal_dhr_26",
+      "from": "JAL",
+      "to": "DHR",
+      "distanceKm": 160,
+      "speedKmph": 50,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_dhr_klu_27",
+      "from": "DHR",
+      "to": "KLU",
+      "distanceKm": 195,
+      "speedKmph": 40,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_gzb_mrt_28",
+      "from": "GZB",
+      "to": "MRT",
+      "distanceKm": 48,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_mrt_hrd_29",
+      "from": "MRT",
+      "to": "HRD",
+      "distanceKm": 150,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hrd_rke_30",
+      "from": "HRD",
+      "to": "RKE",
+      "distanceKm": 25,
+      "speedKmph": 55,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_rke_ddn_31",
+      "from": "RKE",
+      "to": "DDN",
+      "distanceKm": 45,
+      "speedKmph": 55,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hrd_ddn_32",
+      "from": "HRD",
+      "to": "DDN",
+      "distanceKm": 52,
+      "speedKmph": 60,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_chd_ddn_33",
+      "from": "CHD",
+      "to": "DDN",
+      "distanceKm": 170,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hrd_nnt_34",
+      "from": "HRD",
+      "to": "NNT",
+      "distanceKm": 220,
+      "speedKmph": 50,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_mrt_bry_35",
+      "from": "MRT",
+      "to": "BRY",
+      "distanceKm": 215,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_bry_nnt_36",
+      "from": "BRY",
+      "to": "NNT",
+      "distanceKm": 130,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_noi_mtr_37",
+      "from": "NOI",
+      "to": "MTR",
+      "distanceKm": 140,
+      "speedKmph": 100,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_mtr_agr_38",
+      "from": "MTR",
+      "to": "AGR",
+      "distanceKm": 55,
+      "speedKmph": 90,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_del_mtr_39",
+      "from": "DEL",
+      "to": "MTR",
+      "distanceKm": 145,
+      "speedKmph": 90,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_del_alh_40",
+      "from": "DEL",
+      "to": "ALH",
+      "distanceKm": 140,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_alh_agr_41",
+      "from": "ALH",
+      "to": "AGR",
+      "distanceKm": 85,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_alh_bry_42",
+      "from": "ALH",
+      "to": "BRY",
+      "distanceKm": 150,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_agr_gwl_43",
+      "from": "AGR",
+      "to": "GWL",
+      "distanceKm": 120,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_gwl_jhs_44",
+      "from": "GWL",
+      "to": "JHS",
+      "distanceKm": 105,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jhs_sag_45",
+      "from": "JHS",
+      "to": "SAG",
+      "distanceKm": 200,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_sag_bpl_46",
+      "from": "SAG",
+      "to": "BPL",
+      "distanceKm": 170,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_sag_jbp_47",
+      "from": "SAG",
+      "to": "JBP",
+      "distanceKm": 165,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jhs_knp_48",
+      "from": "JHS",
+      "to": "KNP",
+      "distanceKm": 225,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_agr_lko_49",
+      "from": "AGR",
+      "to": "LKO",
+      "distanceKm": 335,
+      "speedKmph": 100,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_agr_knp_50",
+      "from": "AGR",
+      "to": "KNP",
+      "distanceKm": 280,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_knp_lko_51",
+      "from": "KNP",
+      "to": "LKO",
+      "distanceKm": 80,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_bry_lko_52",
+      "from": "BRY",
+      "to": "LKO",
+      "distanceKm": 250,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_lko_ayd_53",
+      "from": "LKO",
+      "to": "AYD",
+      "distanceKm": 135,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ayd_gkp_54",
+      "from": "AYD",
+      "to": "GKP",
+      "distanceKm": 135,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_gkp_vns_55",
+      "from": "GKP",
+      "to": "VNS",
+      "distanceKm": 205,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_gkp_mzp_56",
+      "from": "GKP",
+      "to": "MZP",
+      "distanceKm": 250,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_lko_pry_57",
+      "from": "LKO",
+      "to": "PRY",
+      "distanceKm": 200,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_knp_pry_58",
+      "from": "KNP",
+      "to": "PRY",
+      "distanceKm": 205,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pry_vns_59",
+      "from": "PRY",
+      "to": "VNS",
+      "distanceKm": 125,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pry_rew_60",
+      "from": "PRY",
+      "to": "REW",
+      "distanceKm": 130,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_rew_jbp_61",
+      "from": "REW",
+      "to": "JBP",
+      "distanceKm": 240,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vns_pat_62",
+      "from": "VNS",
+      "to": "PAT",
+      "distanceKm": 250,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vns_gya_63",
+      "from": "VNS",
+      "to": "GYA",
+      "distanceKm": 255,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pat_mzp_64",
+      "from": "PAT",
+      "to": "MZP",
+      "distanceKm": 75,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pat_gya_65",
+      "from": "PAT",
+      "to": "GYA",
+      "distanceKm": 105,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pat_bgp_66",
+      "from": "PAT",
+      "to": "BGP",
+      "distanceKm": 235,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ggn_jai_67",
+      "from": "GGN",
+      "to": "JAI",
+      "distanceKm": 240,
+      "speedKmph": 90,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jai_ajm_68",
+      "from": "JAI",
+      "to": "AJM",
+      "distanceKm": 135,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ajm_jdh_69",
+      "from": "AJM",
+      "to": "JDH",
+      "distanceKm": 205,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jai_bkn_70",
+      "from": "JAI",
+      "to": "BKN",
+      "distanceKm": 330,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_bkn_jdh_71",
+      "from": "BKN",
+      "to": "JDH",
+      "distanceKm": 250,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jdh_jsm_72",
+      "from": "JDH",
+      "to": "JSM",
+      "distanceKm": 280,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_bkn_jsm_73",
+      "from": "BKN",
+      "to": "JSM",
+      "distanceKm": 330,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_btd_bkn_74",
+      "from": "BTD",
+      "to": "BKN",
+      "distanceKm": 310,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ajm_udr_75",
+      "from": "AJM",
+      "to": "UDR",
+      "distanceKm": 265,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jdh_udr_76",
+      "from": "JDH",
+      "to": "UDR",
+      "distanceKm": 260,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jai_kta_77",
+      "from": "JAI",
+      "to": "KTA",
+      "distanceKm": 250,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_kta_udr_78",
+      "from": "KTA",
+      "to": "UDR",
+      "distanceKm": 285,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_kta_bpl_79",
+      "from": "KTA",
+      "to": "BPL",
+      "distanceKm": 330,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_udr_gnd_80",
+      "from": "UDR",
+      "to": "GND",
+      "distanceKm": 240,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_gnd_amd_81",
+      "from": "GND",
+      "to": "AMD",
+      "distanceKm": 25,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_udr_amd_82",
+      "from": "UDR",
+      "to": "AMD",
+      "distanceKm": 260,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amd_vad_83",
+      "from": "AMD",
+      "to": "VAD",
+      "distanceKm": 110,
+      "speedKmph": 100,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vad_srt_84",
+      "from": "VAD",
+      "to": "SRT",
+      "distanceKm": 150,
+      "speedKmph": 90,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amd_rjk_85",
+      "from": "AMD",
+      "to": "RJK",
+      "distanceKm": 215,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_rjk_jam_86",
+      "from": "RJK",
+      "to": "JAM",
+      "distanceKm": 90,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_rjk_bvn_87",
+      "from": "RJK",
+      "to": "BVN",
+      "distanceKm": 175,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amd_bvn_88",
+      "from": "AMD",
+      "to": "BVN",
+      "distanceKm": 170,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_rjk_bhj_89",
+      "from": "RJK",
+      "to": "BHJ",
+      "distanceKm": 230,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amd_bhj_90",
+      "from": "AMD",
+      "to": "BHJ",
+      "distanceKm": 330,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vad_idr_91",
+      "from": "VAD",
+      "to": "IDR",
+      "distanceKm": 340,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_idr_ujj_92",
+      "from": "IDR",
+      "to": "UJJ",
+      "distanceKm": 55,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_idr_bpl_93",
+      "from": "IDR",
+      "to": "BPL",
+      "distanceKm": 195,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_bpl_jbp_94",
+      "from": "BPL",
+      "to": "JBP",
+      "distanceKm": 295,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_srt_nsk_95",
+      "from": "SRT",
+      "to": "NSK",
+      "distanceKm": 225,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_srt_mum_96",
+      "from": "SRT",
+      "to": "MUM",
+      "distanceKm": 280,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_mum_thn_97",
+      "from": "MUM",
+      "to": "THN",
+      "distanceKm": 28,
+      "speedKmph": 55,
+      "roadType": "local",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_thn_nmu_98",
+      "from": "THN",
+      "to": "NMU",
+      "distanceKm": 25,
+      "speedKmph": 55,
+      "roadType": "local",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_mum_nmu_99",
+      "from": "MUM",
+      "to": "NMU",
+      "distanceKm": 30,
+      "speedKmph": 60,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_mum_pne_100",
+      "from": "MUM",
+      "to": "PNE",
+      "distanceKm": 150,
+      "speedKmph": 95,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_nmu_pne_101",
+      "from": "NMU",
+      "to": "PNE",
+      "distanceKm": 125,
+      "speedKmph": 95,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_thn_nsk_102",
+      "from": "THN",
+      "to": "NSK",
+      "distanceKm": 145,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_nsk_pne_103",
+      "from": "NSK",
+      "to": "PNE",
+      "distanceKm": 210,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_nsk_chb_104",
+      "from": "NSK",
+      "to": "CHB",
+      "distanceKm": 190,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pne_chb_105",
+      "from": "PNE",
+      "to": "CHB",
+      "distanceKm": 235,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pne_sol_mh_106",
+      "from": "PNE",
+      "to": "SOL_MH",
+      "distanceKm": 255,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pne_klp_107",
+      "from": "PNE",
+      "to": "KLP",
+      "distanceKm": 235,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_klp_goa_108",
+      "from": "KLP",
+      "to": "GOA",
+      "distanceKm": 220,
+      "speedKmph": 50,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_mum_goa_109",
+      "from": "MUM",
+      "to": "GOA",
+      "distanceKm": 585,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_goa_mrg_110",
+      "from": "GOA",
+      "to": "MRG",
+      "distanceKm": 35,
+      "speedKmph": 55,
+      "roadType": "local",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_bpl_ngp_111",
+      "from": "BPL",
+      "to": "NGP",
+      "distanceKm": 350,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jbp_ngp_112",
+      "from": "JBP",
+      "to": "NGP",
+      "distanceKm": 275,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_chb_amv_113",
+      "from": "CHB",
+      "to": "AMV",
+      "distanceKm": 280,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_amv_ngp_114",
+      "from": "AMV",
+      "to": "NGP",
+      "distanceKm": 155,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_chb_nnd_115",
+      "from": "CHB",
+      "to": "NND",
+      "distanceKm": 260,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_nnd_ngp_116",
+      "from": "NND",
+      "to": "NGP",
+      "distanceKm": 350,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_nnd_hyd_117",
+      "from": "NND",
+      "to": "HYD",
+      "distanceKm": 280,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ngp_hyd_118",
+      "from": "NGP",
+      "to": "HYD",
+      "distanceKm": 500,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ngp_rpr_119",
+      "from": "NGP",
+      "to": "RPR",
+      "distanceKm": 285,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_rpr_bsp_120",
+      "from": "RPR",
+      "to": "BSP",
+      "distanceKm": 120,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jbp_bsp_121",
+      "from": "JBP",
+      "to": "BSP",
+      "distanceKm": 345,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hyd_wrg_122",
+      "from": "HYD",
+      "to": "WRG",
+      "distanceKm": 145,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hyd_nzb_123",
+      "from": "HYD",
+      "to": "NZB",
+      "distanceKm": 175,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hyd_krm_124",
+      "from": "HYD",
+      "to": "KRM",
+      "distanceKm": 165,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_nzb_nnd_125",
+      "from": "NZB",
+      "to": "NND",
+      "distanceKm": 120,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_krm_wrg_126",
+      "from": "KRM",
+      "to": "WRG",
+      "distanceKm": 75,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_wrg_vja_127",
+      "from": "WRG",
+      "to": "VJA",
+      "distanceKm": 210,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hyd_vja_128",
+      "from": "HYD",
+      "to": "VJA",
+      "distanceKm": 275,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hyd_krn_129",
+      "from": "HYD",
+      "to": "KRN",
+      "distanceKm": 215,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_krn_atp_130",
+      "from": "KRN",
+      "to": "ATP",
+      "distanceKm": 145,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_atp_blr_131",
+      "from": "ATP",
+      "to": "BLR",
+      "distanceKm": 215,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hyd_blr_132",
+      "from": "HYD",
+      "to": "BLR",
+      "distanceKm": 570,
+      "speedKmph": 90,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vja_gnt_133",
+      "from": "VJA",
+      "to": "GNT",
+      "distanceKm": 35,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vja_vsp_134",
+      "from": "VJA",
+      "to": "VSP",
+      "distanceKm": 350,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vsp_bmr_135",
+      "from": "VSP",
+      "to": "BMR",
+      "distanceKm": 270,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_gnt_tpt_136",
+      "from": "GNT",
+      "to": "TPT",
+      "distanceKm": 380,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_krn_tpt_137",
+      "from": "KRN",
+      "to": "TPT",
+      "distanceKm": 340,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_tpt_che_138",
+      "from": "TPT",
+      "to": "CHE",
+      "distanceKm": 135,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_tpt_blr_139",
+      "from": "TPT",
+      "to": "BLR",
+      "distanceKm": 250,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vja_che_140",
+      "from": "VJA",
+      "to": "CHE",
+      "distanceKm": 450,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_sol_mh_klm_141",
+      "from": "SOL_MH",
+      "to": "KLM",
+      "distanceKm": 145,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_klm_hyd_142",
+      "from": "KLM",
+      "to": "HYD",
+      "distanceKm": 220,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_sol_mh_blg_143",
+      "from": "SOL_MH",
+      "to": "BLG",
+      "distanceKm": 260,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_klp_blg_144",
+      "from": "KLP",
+      "to": "BLG",
+      "distanceKm": 110,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_blg_hub_145",
+      "from": "BLG",
+      "to": "HUB",
+      "distanceKm": 100,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_goa_blg_146",
+      "from": "GOA",
+      "to": "BLG",
+      "distanceKm": 125,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_goa_hub_147",
+      "from": "GOA",
+      "to": "HUB",
+      "distanceKm": 185,
+      "speedKmph": 55,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_hub_blr_148",
+      "from": "HUB",
+      "to": "BLR",
+      "distanceKm": 410,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_hub_mng_149",
+      "from": "HUB",
+      "to": "MNG",
+      "distanceKm": 360,
+      "speedKmph": 55,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_blr_mys_150",
+      "from": "BLR",
+      "to": "MYS",
+      "distanceKm": 145,
+      "speedKmph": 95,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_blr_shi_151",
+      "from": "BLR",
+      "to": "SHI",
+      "distanceKm": 300,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_shi_mng_152",
+      "from": "SHI",
+      "to": "MNG",
+      "distanceKm": 190,
+      "speedKmph": 50,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_mys_mng_153",
+      "from": "MYS",
+      "to": "MNG",
+      "distanceKm": 255,
+      "speedKmph": 50,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_blr_che_154",
+      "from": "BLR",
+      "to": "CHE",
+      "distanceKm": 345,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_blr_vel_155",
+      "from": "BLR",
+      "to": "VEL",
+      "distanceKm": 215,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_vel_che_156",
+      "from": "VEL",
+      "to": "CHE",
+      "distanceKm": 140,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_che_pdy_157",
+      "from": "CHE",
+      "to": "PDY",
+      "distanceKm": 150,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_blr_slm_158",
+      "from": "BLR",
+      "to": "SLM",
+      "distanceKm": 200,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_slm_cbe_159",
+      "from": "SLM",
+      "to": "CBE",
+      "distanceKm": 165,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_slm_trz_160",
+      "from": "SLM",
+      "to": "TRZ",
+      "distanceKm": 140,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_trz_mdu_161",
+      "from": "TRZ",
+      "to": "MDU",
+      "distanceKm": 135,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_cbe_mdu_162",
+      "from": "CBE",
+      "to": "MDU",
+      "distanceKm": 210,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_mdu_tvl_163",
+      "from": "MDU",
+      "to": "TVL",
+      "distanceKm": 160,
+      "speedKmph": 85,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_tvl_kny_164",
+      "from": "TVL",
+      "to": "KNY",
+      "distanceKm": 85,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_trz_pdy_165",
+      "from": "TRZ",
+      "to": "PDY",
+      "distanceKm": 200,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_mys_cbe_166",
+      "from": "MYS",
+      "to": "CBE",
+      "distanceKm": 195,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_kny_tvm_167",
+      "from": "KNY",
+      "to": "TVM",
+      "distanceKm": 90,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_tvm_alp_168",
+      "from": "TVM",
+      "to": "ALP",
+      "distanceKm": 150,
+      "speedKmph": 60,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_alp_koc_169",
+      "from": "ALP",
+      "to": "KOC",
+      "distanceKm": 60,
+      "speedKmph": 60,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_koc_tcr_170",
+      "from": "KOC",
+      "to": "TCR",
+      "distanceKm": 75,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_tcr_koz_171",
+      "from": "TCR",
+      "to": "KOZ",
+      "distanceKm": 115,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_koz_knr_172",
+      "from": "KOZ",
+      "to": "KNR",
+      "distanceKm": 90,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_knr_mng_173",
+      "from": "KNR",
+      "to": "MNG",
+      "distanceKm": 140,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_mdu_koc_174",
+      "from": "MDU",
+      "to": "KOC",
+      "distanceKm": 260,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_cbe_tcr_175",
+      "from": "CBE",
+      "to": "TCR",
+      "distanceKm": 130,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_cbe_koz_176",
+      "from": "CBE",
+      "to": "KOZ",
+      "distanceKm": 180,
+      "speedKmph": 55,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_pat_dhn_177",
+      "from": "PAT",
+      "to": "DHN",
+      "distanceKm": 290,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_gya_ran_178",
+      "from": "GYA",
+      "to": "RAN",
+      "distanceKm": 220,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_dhn_asl_179",
+      "from": "DHN",
+      "to": "ASL",
+      "distanceKm": 65,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_asl_kol_180",
+      "from": "ASL",
+      "to": "KOL",
+      "distanceKm": 215,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_asl_ran_181",
+      "from": "ASL",
+      "to": "RAN",
+      "distanceKm": 195,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ran_jsr_182",
+      "from": "RAN",
+      "to": "JSR",
+      "distanceKm": 130,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jsr_kgp_183",
+      "from": "JSR",
+      "to": "KGP",
+      "distanceKm": 125,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_kgp_kol_184",
+      "from": "KGP",
+      "to": "KOL",
+      "distanceKm": 130,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_kol_hwh_185",
+      "from": "KOL",
+      "to": "HWH",
+      "distanceKm": 15,
+      "speedKmph": 40,
+      "roadType": "local",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_kgp_bbs_186",
+      "from": "KGP",
+      "to": "BBS",
+      "distanceKm": 320,
+      "speedKmph": 80,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_bbs_ctc_187",
+      "from": "BBS",
+      "to": "CTC",
+      "distanceKm": 30,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_bbs_bmr_188",
+      "from": "BBS",
+      "to": "BMR",
+      "distanceKm": 170,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_rpr_sbp_189",
+      "from": "RPR",
+      "to": "SBP",
+      "distanceKm": 260,
+      "speedKmph": 75,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_sbp_rkl_190",
+      "from": "SBP",
+      "to": "RKL",
+      "distanceKm": 165,
+      "speedKmph": 70,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_rkl_jsr_191",
+      "from": "RKL",
+      "to": "JSR",
+      "distanceKm": 170,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_sbp_ctc_192",
+      "from": "SBP",
+      "to": "CTC",
+      "distanceKm": 280,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_kol_slg_193",
+      "from": "KOL",
+      "to": "SLG",
+      "distanceKm": 570,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_pat_slg_194",
+      "from": "PAT",
+      "to": "SLG",
+      "distanceKm": 450,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_slg_gtk_195",
+      "from": "SLG",
+      "to": "GTK",
+      "distanceKm": 115,
+      "speedKmph": 35,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_slg_ghy_196",
+      "from": "SLG",
+      "to": "GHY",
+      "distanceKm": 430,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_ghy_shl_197",
+      "from": "GHY",
+      "to": "SHL",
+      "distanceKm": 100,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_ghy_tez_198",
+      "from": "GHY",
+      "to": "TEZ",
+      "distanceKm": 180,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_tez_itn_199",
+      "from": "TEZ",
+      "to": "ITN",
+      "distanceKm": 155,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_tez_jrh_200",
+      "from": "TEZ",
+      "to": "JRH",
+      "distanceKm": 165,
+      "speedKmph": 60,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jrh_dbr_201",
+      "from": "JRH",
+      "to": "DBR",
+      "distanceKm": 135,
+      "speedKmph": 65,
+      "roadType": "highway",
+      "terrain": "plain",
+      "oneWay": false
+    },
+    {
+      "id": "e_jrh_koh_202",
+      "from": "JRH",
+      "to": "KOH",
+      "distanceKm": 185,
+      "speedKmph": 40,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_shl_sil_203",
+      "from": "SHL",
+      "to": "SIL",
+      "distanceKm": 215,
+      "speedKmph": 40,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_sil_agt_204",
+      "from": "SIL",
+      "to": "AGT",
+      "distanceKm": 300,
+      "speedKmph": 45,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_sil_aiz_205",
+      "from": "SIL",
+      "to": "AIZ",
+      "distanceKm": 175,
+      "speedKmph": 35,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_sil_imp_206",
+      "from": "SIL",
+      "to": "IMP",
+      "distanceKm": 260,
+      "speedKmph": 35,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    },
+    {
+      "id": "e_koh_imp_207",
+      "from": "KOH",
+      "to": "IMP",
+      "distanceKm": 140,
+      "speedKmph": 35,
+      "roadType": "highway",
+      "terrain": "hill",
+      "oneWay": false
+    }
   ]
 }

@@ -199,55 +199,46 @@ export function runAllTests() {
   try {
     const realGraph = loadGraph();
 
-    // R1: Sector 17 to Shimla
-    // Expected: passes Panchkula (PKL_S5 or PKL_MDC), Pinjore, Kalka, Parwanoo, Solan, Shimla; distance within 10% of ~115 km (103.5 - 126.5 km)
-    const s17Shimla = dijkstra(realGraph, 'CHD17', 'SML', { mode: 'distance' });
-    const corridorNodes = ['PNJ', 'KLK', 'PRW', 'SOL', 'SML'];
-    const passesPanchkula = s17Shimla.path.includes('PKL_S5') || s17Shimla.path.includes('PKL_MDC');
-    const passesAll = passesPanchkula && corridorNodes.every(id => s17Shimla.path.includes(id));
-    const distValid = s17Shimla.distanceKm >= 95 && s17Shimla.distanceKm <= 130;
+    // R1: Delhi to Mumbai (Golden Quadrilateral Western Corridor)
+    const delMum = dijkstra(realGraph, 'DEL', 'MUM', { mode: 'distance' });
+    const r1Passes = delMum.found && delMum.distanceKm >= 1200 && delMum.distanceKm <= 1650;
     record(
       'R1',
-      'Real Map: Sector 17 to Shimla (via Panchkula, Pinjore, Kalka, Parwanoo, Solan; ~115 km ±10%)',
-      passesAll && distValid,
-      `Distance: ${s17Shimla.distanceKm} km, Path: ${s17Shimla.path.join(' -> ')}`
+      'Real Map: Delhi to Mumbai (NH48 Western Corridor; ~1450-1500 km)',
+      r1Passes,
+      `Distance: ${delMum.distanceKm} km, Path: ${delMum.path.join(' -> ')}`
     );
 
-    // R2: Sector 17 to Manali
-    // Expected: passes Ropar, Kiratpur, Bilaspur, Mandi, Kullu; roughly 300–320 km
-    const s17Manali = dijkstra(realGraph, 'CHD17', 'MNL', { mode: 'time' });
-    const mCorridorNodes = ['RPR', 'KRT', 'BLP', 'MND', 'KLU', 'MNL'];
-    const mPasses = mCorridorNodes.every(id => s17Manali.path.includes(id));
-    const mDistValid = s17Manali.distanceKm >= 280 && s17Manali.distanceKm <= 340;
+    // R2: Delhi to Chandigarh (Northern Highway Corridor)
+    const delChd = dijkstra(realGraph, 'DEL', 'CHD', { mode: 'time' });
+    const r2Passes = delChd.found && delChd.distanceKm >= 220 && delChd.distanceKm <= 280;
     record(
       'R2',
-      'Real Map: Sector 17 to Manali (via Ropar, Kiratpur, Bilaspur, Mandi, Kullu; ~300-320 km)',
-      mPasses && mDistValid,
-      `Distance: ${s17Manali.distanceKm} km, Time: ${s17Manali.timeMin} min, Path: ${s17Manali.path.join(' -> ')}`
+      'Real Map: Delhi to Chandigarh (NH44 via Panipat, Karnal, Ambala; ~248 km)',
+      r2Passes,
+      `Distance: ${delChd.distanceKm} km, Time: ${delChd.timeMin} min, Path: ${delChd.path.join(' -> ')}`
     );
 
-    // R3: Sector 17 to Airport
-    // Expected: Stays inside city/Mohali, short route (< 15 km)
-    const s17Airport = dijkstra(realGraph, 'CHD17', 'CHD_AIR', { mode: 'distance' });
-    const isShort = s17Airport.distanceKm > 0 && s17Airport.distanceKm < 15;
+    // R3: Mumbai to Pune (Short Intercity Corridor)
+    const mumPne = dijkstra(realGraph, 'MUM', 'PNE', { mode: 'distance' });
+    const isShort = mumPne.found && mumPne.distanceKm >= 120 && mumPne.distanceKm <= 180;
     record(
       'R3',
-      'Real Map: Sector 17 to Airport (Short intra-city/Mohali route < 15 km)',
+      'Real Map: Mumbai to Pune (Mumbai-Pune Expressway; ~150 km)',
       isShort,
-      `Distance: ${s17Airport.distanceKm} km, Path: ${s17Airport.path.join(' -> ')}`
+      `Distance: ${mumPne.distanceKm} km, Path: ${mumPne.path.join(' -> ')}`
     );
 
-    // R4: A* vs Dijkstra efficiency benchmark
-    // PRD Success Metric: "A* explores fewer or equal nodes than Dijkstra on at least 80% of test queries"
+    // R4: A* vs Dijkstra efficiency benchmark on national routes
     const testPairs = [
-      ['CHD17', 'SML'],
-      ['CHD17', 'MNL'],
-      ['CU_GHR', 'SML'],
-      ['MOH_P7', 'KFR'],
-      ['PKL_S5', 'MNL'],
-      ['ISBT43', 'SLG'],
-      ['CHD22', 'SOL'],
-      ['CHD_RLY', 'BLP']
+      ['DEL', 'MUM'],
+      ['DEL', 'BLR'],
+      ['DEL', 'KOL'],
+      ['MUM', 'CHE'],
+      ['KOL', 'CHE'],
+      ['BLR', 'HYD'],
+      ['AMD', 'PNE'],
+      ['LKO', 'PAT']
     ];
 
     let aStarWinsOrTies = 0;
@@ -270,14 +261,14 @@ export function runAllTests() {
     );
 
     // R5: Avoid Highways filter test
-    const normalShimla = dijkstra(realGraph, 'CHD17', 'SML', { mode: 'time', avoidHighways: false });
-    const avoidShimla = dijkstra(realGraph, 'CHD17', 'SML', { mode: 'time', avoidHighways: true, highwayAvoidMode: 'penalty' });
-    const penaltyApplied = avoidShimla.totalCost > normalShimla.totalCost;
+    const normalRoute = dijkstra(realGraph, 'DEL', 'CHD', { mode: 'time', avoidHighways: false });
+    const avoidRoute = dijkstra(realGraph, 'DEL', 'CHD', { mode: 'time', avoidHighways: true, highwayAvoidMode: 'penalty' });
+    const penaltyApplied = avoidRoute.totalCost > normalRoute.totalCost;
     record(
       'R5',
       'Avoid Highways: Penalty mode increases cost or redirects to local roads',
       penaltyApplied,
-      `Normal cost: ${normalShimla.totalCost} min, Avoid Highways cost: ${avoidShimla.totalCost} min`
+      `Normal cost: ${normalRoute.totalCost} min, Avoid Highways cost: ${avoidRoute.totalCost} min`
     );
 
   } catch (err) {

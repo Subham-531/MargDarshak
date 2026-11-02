@@ -4,7 +4,6 @@ import {
   Search,
   Route,
   Zap,
-  GitCompare,
   BookOpen,
   CheckCircle2,
   Navigation,
@@ -35,7 +34,6 @@ export interface CommandPaletteProps {
     stops?: string[]
   ) => void;
   onSelectMode?: (m: string) => void;
-  onOpenCompare?: () => void;
   onOpenViva?: () => void;
   onOpenTests?: () => void;
   nodes?: Array<{ id: string; name: string; region: string }>;
@@ -46,7 +44,6 @@ export function CommandPalette({
   onClose,
   onSelectRoute,
   onSelectMode,
-  onOpenCompare,
   onOpenViva,
   onOpenTests,
   nodes = [],
@@ -59,50 +56,62 @@ export function CommandPalette({
   // Define commands
   const allCommands: CommandItem[] = [
     {
-      id: 'route-shimla',
-      title: 'Sector 17 Plaza → Shimla The Ridge',
-      subtitle: 'Google Maps driving route to Shimla',
+      id: 'route-del-mum',
+      title: 'New Delhi → Mumbai',
+      subtitle: 'Google Maps driving route via NH48 Western Corridor',
       category: 'Popular Routes',
       icon: <Route className="w-4 h-4 text-purple-900" />,
       iconBg: 'bg-[#E9DEFF]',
       action: () => {
-        onSelectRoute?.('CHD17', 'SML');
+        onSelectRoute?.('DEL', 'MUM');
         onClose();
       },
     },
     {
-      id: 'route-manali',
-      title: 'Sector 17 Plaza → Manali Mall Road',
-      subtitle: 'Google Maps driving route to Manali',
+      id: 'route-del-blr',
+      title: 'New Delhi → Bengaluru',
+      subtitle: 'Google Maps driving route via NH44 Central-South Corridor',
       category: 'Popular Routes',
       icon: <Route className="w-4 h-4 text-amber-900" />,
       iconBg: 'bg-[#FFE5D9]',
       action: () => {
-        onSelectRoute?.('CHD17', 'MNL');
+        onSelectRoute?.('DEL', 'BLR');
         onClose();
       },
     },
     {
-      id: 'route-kufri',
-      title: 'Multi-Stop: S17 → Panchkula → Solan → Kufri',
+      id: 'route-mum-goa',
+      title: 'Mumbai → Goa (Panaji)',
+      subtitle: 'Google Maps scenic coastal driving route',
+      category: 'Popular Routes',
+      icon: <Route className="w-4 h-4 text-emerald-900" />,
+      iconBg: 'bg-[#EDFAF3]',
+      action: () => {
+        onSelectRoute?.('MUM', 'GOA');
+        onClose();
+      },
+    },
+    {
+      id: 'route-del-che-multi',
+      title: 'Multi-Stop: Delhi → Jaipur → Hyderabad → Chennai',
       subtitle: 'Google Maps route with optimized driving stop order',
       category: 'Popular Routes',
       icon: <Sparkles className="w-4 h-4 text-emerald-900" />,
       iconBg: 'bg-[#D9F2E6]',
       action: () => {
-        onSelectRoute?.('CHD17', 'KFR', ['PKL_S5', 'SOL']);
+        onSelectRoute?.('DEL', 'CHE', ['JAI', 'HYD']);
         onClose();
       },
     },
     {
-      id: 'route-cu-shimla',
-      title: 'CU Gharuan Campus → Shimla',
-      subtitle: 'Google Maps driving route from campus to Shimla',
+      id: 'route-kol-che',
+      title: 'Kolkata → Chennai',
+      subtitle: 'Google Maps route via East Coast NH16',
       category: 'Popular Routes',
       icon: <Route className="w-4 h-4 text-purple-900" />,
       iconBg: 'bg-[#E9DEFF]',
       action: () => {
-        onSelectRoute?.('CU_GHR', 'SML');
+        onSelectRoute?.('KOL', 'CHE');
         onClose();
       },
     },
@@ -127,18 +136,6 @@ export function CommandPalette({
       iconBg: 'bg-[#FFE5D9]',
       action: () => {
         onSelectMode?.('time');
-        onClose();
-      },
-    },
-    {
-      id: 'tool-compare',
-      title: 'Compare Dijkstra vs A* Search',
-      subtitle: 'Side-by-side nodes explored, savings percentage, and execution latency',
-      category: 'Tools & Guides',
-      icon: <GitCompare className="w-4 h-4 text-purple-900" />,
-      iconBg: 'bg-[#E9DEFF]',
-      action: () => {
-        onOpenCompare?.();
         onClose();
       },
     },
@@ -177,7 +174,7 @@ export function CommandPalette({
     icon: <Navigation className="w-4 h-4 text-purple-900" />,
     iconBg: 'bg-[#E9DEFF]',
     action: () => {
-      onSelectRoute?.(node.id, 'SML');
+      onSelectRoute?.(node.id, 'DEL');
       onClose();
     },
   }));
@@ -372,7 +369,7 @@ export function CommandPalette({
                 </span>
               </div>
               <span className="font-mono text-[10px] text-purple-700 font-semibold">
-                PathScope Command
+                MargDarshak Command
               </span>
             </div>
           </motion.div>

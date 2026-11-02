@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GitCompare, X, CheckCircle, Zap, Cpu, Sparkles, TrendingDown, ArrowRight } from 'lucide-react';
+import { apiUrl } from '../lib/api';
 
 export default function CompareModal({
   isOpen,
@@ -21,7 +22,7 @@ export default function CompareModal({
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch('/api/compare', {
+        const response = await fetch(apiUrl('/api/compare'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

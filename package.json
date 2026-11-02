@@ -1,7 +1,7 @@
 {
-  "name": "pathscope",
+  "name": "margdarshak",
   "version": "1.0.0",
-  "description": "PathScope — Chandigarh & Himachal Route Planner | DSA Course Project by Manas Gupta, Chandigarh University",
+  "description": "MargDarshak (मार्गदर्शक) — 3D DSA Graph & Indian Highway Route Planner",
   "private": true,
   "type": "module",
   "scripts": {
