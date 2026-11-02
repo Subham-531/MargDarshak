@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 console.log("===================================================================");
-console.log(" 🚀 PathScope — India National Route Planner Launching...          ");
+console.log(" 🧭 MargDarshak (मार्गदर्शक) — 3D Highway Engine Launching...       ");
 console.log("===================================================================\n");
 
 const isWin = process.platform === 'win32';
@@ -47,7 +47,7 @@ clientProc.stderr.on('data', (data) => {
 });
 
 function cleanup() {
-  console.log("\n[PathScope] Shutting down all services...");
+  console.log("\n[MargDarshak] Shutting down all services...");
   try {
     serverProc.kill();
   } catch {}
