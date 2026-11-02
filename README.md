@@ -1,8 +1,4 @@
-# PathScope — Chandigarh & Himachal Route Planner
-
-**Author:** Manas Gupta · B.E. Computer Science & Engineering, Chandigarh University  
-**Subject:** Data Structures & Algorithms (DSA)  
-**Specification:** Product Requirements Document (PRD) v1.0  
+# MargDarshak (मार्गदर्शक) — 3D DSA Graph & Indian Highway Explorer
 
 ---
 
@@ -10,15 +6,14 @@
 
 In conventional Data Structures & Algorithms (DSA) courses, graph algorithms are taught on abstract node-and-edge diagrams ($A, B, C, D$). Students calculate Dijkstra by hand on paper or dry-run slides, but rarely see how real-world navigation engines translate a physical highway and road network into a weighted graph.
 
-**PathScope** combines Google Maps driving directions for real road routes with a weighted graph of **48 locations and 65 edges** for DSA demonstrations across **Chandigarh, the Tricity region, and Himachal Pradesh**. The project implements:
+**MargDarshak** combines Google Maps 3D driving directions with an all-India highway network graph of **135 locations and 207 edges** for Data Structures & Algorithms (DSA) demonstrations across national highway corridors and regional routes. The project implements:
 - **Graph as an Adjacency List** from scratch.
 - **Binary Min-Heap Priority Queue** from scratch.
 - **Dijkstra’s Shortest Path Algorithm** from scratch.
-- **A\* Search with an Admissible Haversine Heuristic** from scratch for both distance and travel time.
+- **Dynamic Roadblock & Detour Simulator:** Simulate highway closures, landslides, or construction blocks (e.g. blocking Jaipur or Ambala) and watch Dijkstra dynamically recalculate the optimal detour in real-time.
+- **Step-by-Step Simulation Engine** with live vehicle movement, follow-camera 3D perspective, and priority queue inspection.
 - **Held-Karp Bitmask Dynamic Programming** ($O(2^k \cdot k^2)$) for optimal multi-stop Traveling Salesperson (TSP) ordering.
-- **Step-by-Step Simulation Engine** with true forward and backward stepping, live priority queue inspection, and settled distance tables.
-- **Head-to-Head Compare Mode** demonstrating why and how A* explores fewer nodes than Dijkstra.
-- **Viva & Evaluation Dashboard** with live test runner for all PRD verification test cases (T1–T7 and real-map benchmarks R1–R5).
+- **Viva & Evaluation Dashboard** with live test runner for all verification test cases (T1–T7 unit tests and real-map benchmarks R1–R5).
 
 **Find Route** always requests and draws Google's snapped driving route directly. **Simulate Algorithm** offers two modes: **Actual Road Network** samples and progressively reveals Google's returned road geometry, while **Direct Graph / Straight Edges** runs the backend A* search and animates its traced node and weighted-edge exploration using straight lines between graph coordinates. The graph mode highlights its final shortest path in green and follows selected stops in their listed order. Straight-edge rendering is opt-in; route lookup remains independent of the selected simulation mode. Pause or resume either animation and adjust its delay from 25–500 ms per step (50 ms by default).
 
@@ -106,10 +101,10 @@ Use the sun/moon control in the header to switch between the dark olive theme an
 
 ## 4. Road Network Dataset (`graph.json`)
 
-**48 Nodes & 65 Edges** covering:
-1. **Chandigarh Sector Grid & Tricity:** Sector 17 Plaza, Sector 22, Sector 35, ISBT 43, ISBT 17, Sukhna Lake, Rock Garden, PGIMER, Panjab University, Tribune Chowk, Railway Station, IT Park, Airport, Mohali (Phase 7, Phase 3B2, PCA Stadium), Kharar, Chandigarh University Gharuan, Landran, Kurali, Zirakpur, Dera Bassi, Panchkula (Sector 5, MDC), Pinjore, Kalka.
-2. **Himachal Corridor 1 (Kalka–Shimla NH5 & Hill Roads):** Parwanoo, Timber Trail (Jabli), Dharampur, Kasauli, Kumarhatti, Solan, Kandaghat, Chail, Shoghi, Shimla ISBT, Shimla Mall Road & Ridge, Kufri.
-3. **Himachal Corridor 2 (Ropar–Kiratpur–Bilaspur–Mandi–Kullu–Manali):** Rupnagar (Ropar), Kiratpur Sahib, Anandpur Sahib, Swarghat, Bilaspur, Sundernagar, Mandi, Pandoh Dam, Aut Tunnel, Bhuntar Airport, Kullu, Naggar Castle, Manali Mall Road, Solang Valley, Baddi Industrial Hub.
+**135 Nodes & 207 Edges** covering:
+1. **National Highway Corridors & Golden Quadrilateral:** Delhi, Mumbai, Bengaluru, Chennai, Kolkata, Hyderabad, Ahmedabad, Jaipur, Pune, Lucknow, Varanasi, Patna, Bhopal, Indore, Surat, Vadodara, Nagpur, etc.
+2. **Chandigarh Sector Grid & Tricity:** Sector 17 Plaza, Sector 22, Sector 35, ISBT 43, ISBT 17, Sukhna Lake, Rock Garden, PGIMER, Panjab University, Tribune Chowk, Railway Station, IT Park, Airport, Mohali, Kharar, Landran, Kurali, Zirakpur, Dera Bassi, Panchkula, Pinjore, Kalka.
+3. **Himachal Corridors (NH5, NH3 & Hill Roads):** Parwanoo, Timber Trail, Dharampur, Kasauli, Solan, Kandaghat, Chail, Shimla, Kufri, Ropar, Kiratpur, Bilaspur, Sundernagar, Mandi, Kullu, Manali, Solang Valley.
 
 ---
 
@@ -137,7 +132,7 @@ Or run `node server/src/tests/runTests.js`.
 
 ---
 
-## 6. How to Run PathScope
+## 6. How to Run MargDarshak
 
 ### Option A: Development Mode (with Live Hot Reloading)
 1. **Start the API Server:**
@@ -145,7 +140,7 @@ Or run `node server/src/tests/runTests.js`.
    cd server
    npm start
    ```
-   Server runs on: `http://localhost:5000`
+   Server runs on: `http://localhost:5001`
 
 2. **Start the React Frontend:**
    ```bash
@@ -162,7 +157,7 @@ Executes all 12 unit tests and real-map benchmark corridors.
 
 ## 7. Google Maps Setup
 
-The frontend uses the **Google Maps JavaScript API Routes Library** to calculate driving routes and render Google's road-following geometry. Google supplies the displayed route, distance, and duration; this is separate from the local Dijkstra/A* graph comparison, which remains available as an educational tool. Map clicks snap the chosen start or destination to the nearest PathScope location, and optional graph locations can be added as driving stops. With multiple stops, Google can reorder the waypoints to optimize the drive. Google returns its recommended route; this is not a guarantee of the mathematically shortest path over every road.
+The frontend uses the **Google Maps JavaScript API Routes Library** to calculate driving routes and render Google's road-following geometry. Google supplies the displayed route, distance, and duration; this is separate from the local Dijkstra graph calculation, which remains available as an educational tool. Map clicks snap the chosen start or destination to the nearest MargDarshak location, and optional graph locations can be added as driving stops. With multiple stops, Google can reorder the waypoints to optimize the drive. Google returns its recommended route; this is not a guarantee of the mathematically shortest path over every road.
 
 1. In Google Cloud Console, create or select a project and attach a billing account.
 2. Enable **Maps JavaScript API** and **Routes API** for that project.
