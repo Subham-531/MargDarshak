@@ -25,3 +25,14 @@ Thumbs.db
 .idea/
 .vite/
 client/.vite/
+
+# Reports and Document Generation Artifacts
+*.pdf
+*.docx
+*.png
+*.jpg
+*.jpeg
+PROJECT_REPORT.md
+generate_*.py
+create_*.py
+template.*
