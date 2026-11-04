@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🧭 MargDarshak (मार्गदर्शक)
-### *3D Indian Highway Engine & Dynamic Graph Navigation System*
+### *Indian Highway Engine & Graph Navigation System*
 
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 [![Tests: 12/12 Passing](https://img.shields.io/badge/Tests-12%2F12%20Passing%20(100%25)-emerald.svg)](#-verification-test-suite)
@@ -9,13 +9,13 @@
 [![Vite](https://img.shields.io/badge/Bundler-Vite%205-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Node.js](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Google Maps](https://img.shields.io/badge/Maps-Google%20Maps%203D%20WebGL-4285F4?logo=google-maps&logoColor=white)](https://developers.google.com/maps)
+[![Maps](https://img.shields.io/badge/Maps-Interactive%20Geospatial%20Map-4285F4?logo=google-maps&logoColor=white)](https://developers.google.com/maps)
 
 <p align="center">
-  <b>MargDarshak</b> (मार्गदर्शक — <i>The Visionary Pathfinder & Guide</i>) bridges academic Data Structures & Algorithms with real-world geospatial navigation. It translates India's physical national highway grid into an active weighted topological graph, executing Dijkstra's algorithm from scratch with dynamic roadblock adaptation and a 3D isometric follow-camera.
+  <b>MargDarshak</b> (मार्गदर्शक — <i>The Visionary Pathfinder & Guide</i>) bridges academic Data Structures & Algorithms with real-world geospatial navigation. It translates India's physical national highway grid into an active weighted topological graph, executing Dijkstra's algorithm from scratch with a custom Binary Min-Heap Priority Queue.
 </p>
 
-[Key Features](#-key-features) • [Roadblock Simulator](#-dynamic-roadblock--incident-simulator) • [DSA From Scratch](#-data-structures--algorithms-from-scratch) • [Verification Tests](#-verification-test-suite) • [Quick Start](#-quick-start) • [Viva Guide](#-viva--interview-cheatsheet)
+[Key Features](#-key-features) • [DSA From Scratch](#-data-structures--algorithms-from-scratch) • [Verification Tests](#-verification-test-suite) • [Quick Start](#-quick-start) • [Viva Guide](#-viva--interview-cheatsheet)
 
 ---
 
@@ -32,60 +32,20 @@
 
 ### 2. ⚡ Pure Dijkstra's Algorithm (Engineered from Scratch)
 - Implemented from foundational computer science principles without third-party algorithm libraries:
-  - **Priority Queue Min-Heap** with $O(\log V)$ push/pop and $O(1)$ peek.
-  - **Overall Search Time Complexity:** $O((V + E) \log V)$ instead of the naïve array-based $O(V^2)$.
+  - **Priority Queue Min-Heap** with $\mathcal{O}(\log V)$ push/pop and $\mathcal{O}(1)$ peek.
+  - **Overall Search Time Complexity:** $\mathcal{O}((V + E) \log V)$ instead of the naïve array-based $\mathcal{O}(V^2)$.
   - **Dual Optimization Metrics:**
     - 📏 **Shortest Distance (km):** Minimizes total geographic highway travel distance.
     - ⏱️ **Fastest Travel Time (min):** Factors road classes (Expressways @ 100–120 km/h, National Highways @ 80 km/h, Mountain Ghats @ 30–40 km/h).
 
-### 3. 🚧 Dynamic Roadblock & Incident Simulator (Real-Time Detours)
-- Click any city or highway junction on the map to trigger an incident (e.g., landslide, flood, construction closure).
-- Dijkstra dynamically treats the blocked vertex as infinite cost ($w = \infty$) and **instantly recalculates the mathematically optimal alternate corridor** across the country in real-time.
-
-### 4. 🎮 3D WebGL Camera Perspective & Vehicle HUD
-- Switch between 4 custom 3D perspectives:
-  - **2D Top-Down ($0^\circ$):** Classical cartographic route overview.
-  - **3D Isometric ($35^\circ$):** Spatial highway topology and terrain relief.
-  - **Cockpit Angle ($55^\circ$):** Driver-perspective corridor view.
-  - **Street Horizon ($65^\circ$):** Low-altitude cinematic trajectory.
+### 3. 🎮 Interactive Geospatial Map & Vehicle HUD
+- **Real-Time Polyline Rendering:** Visualizes active route corridors across the subcontinent with high-contrast road styling.
 - **Multimodal Simulation:** Switch between **Car**, **Sportbike**, and **Walking** travel speeds with smooth interpolated vehicle movement along polyline coordinates.
+- **Trip Telemetry HUD:** Displays total driving distance (km), estimated time of arrival (ETA), and settled node counts.
 
-### 5. 🌓 Adaptive Glassmorphic Design System
+### 4. 🌓 Adaptive Glassmorphic Design System
 - Built with modern glassmorphism, backdrop filters, and custom Framer Motion spring physics.
 - High-contrast **Dark Mode** and **Light Mode** styling with the custom illuminated **MargDarshak vector emblem** (Saffron & Emerald facets symbolizing the path and the navigator).
-
----
-
-## 🚧 Dynamic Roadblock & Incident Simulator
-
-A core evaluation highlight of MargDarshak is demonstrating that the graph is **reactive and dynamic**, rather than a static lookup table.
-
-```
-                    [ Delhi (DEL) ]
-                         |
-      +------------------+------------------+
-      | (Normal NH48)                       | (Detour Corridor)
-      v                                     v
-[ Jaipur (JAI) ]  <-- 🚧 ROADBLOCK!     [ Agra (AGR) ]
-      |                                     |
-[ Ahmedabad (AMD) ]                     [ Gwalior (GWL) ]
-      |                                     |
-      |                                 [ Bhopal (BPL) ]
-      |                                     |
-      |                                 [ Indore (IDR) ]
-      |                                     |
-      +------------------+------------------+
-                         v
-                  [ Mumbai (MUM) ]
-```
-
-### Verified Benchmark Detours:
-
-| Corridor | Normal Shortest Route | When Roadblock is Active | Alternate Detour Route |
-| :--- | :--- | :--- | :--- |
-| **Delhi &rarr; Mumbai** | **1,472 km** (via NH48)<br>`DEL -> GGN -> JAI -> AJM -> UDR -> AMD -> VAD -> SRT -> MUM` | 🚧 **Jaipur (JAI) Blocked** | **1,760 km** (via Central India)<br>`DEL -> MTR -> AGR -> GWL -> JHS -> SAG -> BPL -> IDR -> VAD -> SRT -> MUM` |
-| **Delhi &rarr; Chandigarh** | **248 km** (via NH44)<br>`DEL -> PNP -> KNL -> AMB -> CHD` | 🚧 **Ambala (AMB) Blocked** | **445 km** (via Uttarakhand)<br>`DEL -> GZB -> MRT -> HRD -> DDN -> CHD` |
-| **Mumbai &rarr; Pune** | **150 km** (Mumbai–Pune Expressway)<br>`MUM -> PNE` | 🚧 **Expressway Incident** | Detours via Old Mumbai–Pune NH48 Ghat corridor |
 
 ---
 
@@ -114,7 +74,7 @@ MargDarshak is designed as a canonical reference implementation for **Advanced D
 - **Greedy Invariant:** Settles the shortest distance to a node the moment it is popped from the priority queue.
 - **Time Complexity:** $\mathcal{O}((V + E) \log V)$ using Min-Heap priority queue.
 - **Space Complexity:** $\mathcal{O}(V)$ for distance map, parent tracking, and heap state.
-- **Roadblock Handling:** When a node $u \in \text{blockedNodes}$, all incident edges $(v, u)$ are treated as $w(v, u) = \infty$, forcing the priority queue to explore alternate topological branches.
+- **Path Reconstruction:** Traces parent pointers from destination back to source in $\mathcal{O}(L) \le \mathcal{O}(V)$ steps and reverses the sequence.
 
 ### 4. Held-Karp Bitmask DP for Multi-Stop TSP
 - **File:** [`server/src/algorithms/MultiStop.js`](server/src/algorithms/MultiStop.js)
@@ -130,15 +90,15 @@ MargDarshak is designed as a canonical reference implementation for **Advanced D
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        Frontend: React 18 + Vite                       │
-│  · Google Maps 3D WebGL Camera (Presets: 0°, 35°, 55°, 65° + Tilt HUD) │
-│  · Control Panel: City Pickers, Multimodal Vehicles, Roadblock Toggles │
+│  · Interactive Geospatial Map Viewer & Polyline Renderer               │
+│  · Control Panel: Origin/Destination Pickers, Multimodal Vehicles      │
 │  · Real-Time Step Simulation Engine (Play / Pause / Speed Slider)       │
 │  · Glassmorphic UI with Adaptive Light & Dark Modes                    │
 └───────────────────────────────────▲────────────────────────────────────┘
                                     │ JSON REST API
 ┌───────────────────────────────────▼────────────────────────────────────┐
 │                    Backend: Node.js + Express (Port 5001)              │
-│  · POST /api/route         (Dijkstra execution + dynamic roadblocks)   │
+│  · POST /api/route         (Dijkstra execution on 135-node graph)      │
 │  · GET  /api/graph         (Full 135-node & 207-edge topological mesh) │
 │  · GET  /api/nodes/nearest (Geo-snapping GPS coords to nearest node)   │
 │  · POST /api/multistop     (Held-Karp bitmask DP for TSP ordering)     │
@@ -209,18 +169,7 @@ cd ../server && npm install
 cd ..
 ```
 
-### 3. Configure Google Maps API Key
-Copy the example environment template:
-```bash
-cp client/.env.example client/.env.local
-```
-Add your Google Maps browser key inside `client/.env.local`:
-```env
-VITE_GOOGLE_MAPS_API_KEY=your-google-maps-api-key-here
-```
-*(Enable **Maps JavaScript API** and **Routes API** in Google Cloud Console. For local development, restrict referrers to `http://localhost:3000/*` and `http://127.0.0.1:3000/*`)*.
-
-### 4. Start the Application
+### 3. Start the Application
 Run both backend API and frontend Vite dev server concurrently:
 ```bash
 npm start
@@ -238,13 +187,13 @@ MargDarshak/
 │   ├── public/                 # Favicons & public static assets
 │   ├── src/
 │   │   ├── components/         # UI components
-│   │   │   ├── ControlPanel.tsx   # Sidebar: city selector, roadblocks, modes
+│   │   │   ├── ControlPanel.tsx   # Sidebar: origin/destination picker, route HUD
 │   │   │   ├── Header.tsx         # Top bar: MargDarshak logo, stats, theme toggle
-│   │   │   ├── MapViewer.tsx      # Google Maps 3D WebGL, custom markers & HUD
-│   │   │   ├── MargDarshakLogo.tsx# Custom SVG vector emblem (Saffron & Cyan)
+│   │   │   ├── MapViewer.tsx      # Geospatial map viewer, markers & polyline HUD
+│   │   │   ├── MargDarshakLogo.tsx# Custom SVG vector emblem (Saffron & Emerald)
 │   │   │   ├── TestRunnerModal.tsx# Automated test benchmark modal
 │   │   │   └── VivaGuideModal.tsx # DSA concept and theory guide modal
-│   │   ├── lib/                # Utilities, Google Maps loader, motion physics
+│   │   ├── lib/                # Utilities, API client, motion physics
 │   │   ├── App.tsx             # Root application controller & state orchestrator
 │   │   ├── index.css           # Tailwind CSS, light & dark theme styling
 │   │   └── main.tsx            # React application entry point
@@ -254,7 +203,7 @@ MargDarshak/
 ├── server/                     # Backend Node.js + Express API
 │   ├── src/
 │   │   ├── algorithms/         # DSA algorithms from scratch
-│   │   │   ├── Dijkstra.js        # Dijkstra's algorithm + roadblock support
+│   │   │   ├── Dijkstra.js        # Dijkstra's shortest path algorithm from scratch
 │   │   │   ├── Graph.js           # Adjacency list graph representation
 │   │   │   ├── MinHeap.js         # Binary min-heap priority queue
 │   │   │   └── MultiStop.js       # Held-Karp Bitmask DP for TSP
@@ -262,7 +211,7 @@ MargDarshak/
 │   │   │   └── graph.json         # 135 Indian cities & 207 highway edges dataset
 │   │   ├── tests/
 │   │   │   ├── runTests.js        # CLI test execution script
-│   │   │   └── testSuite.js       # PRD canonical T1–T7 and R1–R5 test definitions
+│   │   │   └── testSuite.js       # Canonical T1–T7 and R1–R5 test definitions
 │   │   ├── utils/
 │   │   │   ├── geo.js             # Haversine distance & nearest-node snapping
 │   │   │   └── graphLoader.js     # Graph JSON loader & validator
@@ -301,9 +250,9 @@ When presenting MargDarshak in a university viva, evaluation, or technical inter
 </details>
 
 <details>
-<summary><b>Q4: How does the Roadblock Simulator mathematically alter Dijkstra's execution?</b></summary>
+<summary><b>Q4: How does the system reconstruct the shortest path if Dijkstra only records distances?</b></summary>
 
-> **Answer:** When an incident or roadblock is placed on node $u$, the algorithm filters out $u$ from the neighbor relaxation loop: for any adjacent vertex $v$, the transition cost $w(v, u)$ is treated as $\infty$. The node is never pushed into the Min-Heap, forcing the priority queue to explore alternative topological corridors (e.g., routing through Agra and Gwalior instead of Jaipur) while still guaranteeing the mathematically shortest remaining detour.
+> **Answer:** In `Dijkstra.js`, during every successful edge relaxation where a shorter path to neighbor $v$ through node $u$ is found, we record $u$ as the predecessor: `parent.set(v, u)`. Once the destination node is settled, the algorithm backtracks from target $D$ through `parent.get(curr)` until reaching the source $S$, and reverses the array to yield the complete ordered sequence of highway cities in $\mathcal{O}(L) \le \mathcal{O}(V)$ time.
 </details>
 
 ---
